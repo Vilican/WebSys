@@ -13,8 +13,8 @@
 		private $specialCaseOpeningTags = array( "/<strong[^>]*/i", "/<b[^>]*/i", "/<i[^>]*/i", "/<big[^>]*/i", "/<small[^>]*/i", "/<u[^>]*/i", "/<sub[^>]*/i", "/<sup[^>]*/i", "/<strike[^>]*/i", "/<s[^>]*/i", '/<p[^>]*/i' );
 		private $specialCaseClosingTags = array( "</strong>", "</b>", "</i>", "</big>", "</small>", "</u>", "</sub>", "</sup>", "</strike>", "</s>", '</p>' );
 		public function __construct( $oldText, $newText, $encoding = 'UTF-8' ) {
-			$this->oldText = $this->purifyHtml( trim( $oldText ) );
-			$this->newText = $this->purifyHtml( trim( $newText ) );
+			$this->oldText = trim( $oldText );
+			$this->newText = trim( $newText );
 			$this->encoding = $encoding;
 			$this->content = '';
 		}
@@ -26,27 +26,6 @@
 		}
 		public function getDifference() {
 			return $this->content;
-		}
-		private function getStringBetween( $str, $start, $end ) {
-			$expStr = explode( $start, $str, 2 );
-			if( count( $expStr ) > 1 ) {
-				$expStr = explode( $end, $expStr[ 1 ] );
-				if( count( $expStr ) > 1 ) {
-					array_pop( $expStr );
-					return implode( $end, $expStr );
-				}
-			}
-			return '';
-		}
-		private function purifyHtml( $html, $tags = null ) {
-			if( class_exists( 'Tidy' ) && false ) {
-				$config = array( 'output-xhtml'   => true, 'indent' => false );
-				$tidy = new tidy;
-				$tidy->parseString( $html, $config, 'utf8' );
-				$html = ( string )$tidy;
-				return $this->getStringBetween( $html, '<body>' );
-			}
-			return $html;
 		}
 		public function build() {
 			$this->SplitInputsToWords();
@@ -148,14 +127,10 @@
 		private function IsEndOfTag( $val ) {
 			return $val == ">";
 		}
-		private function IsWhiteSpace( $value ) {
-			return !preg_match( '[^\s]', $value );
-		}
 		private function IsAlphaNum( $value ) {
 			return preg_match( '/[\p{L}\p{N}]+/u', $value );
 		}
 		private function Explode( $value ) {
-			// as suggested by @onassar
 			return preg_split( '//u', $value );
 		}
 		private function PerformOperation( $operation ) {

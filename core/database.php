@@ -42,7 +42,7 @@ class DB {
 	}
 	
 	public function update_activity($user_id) {
-		$result = self::$connection->query("UPDATE `users` SET `lastact`= NOW() WHERE `id` = '". self::$connection->real_escape_string($user_id) ."';");
+		self::$connection->query("UPDATE `users` SET `lastact`= NOW() WHERE `id` = '". self::$connection->real_escape_string($user_id) ."';");
 	}
 	
 }
