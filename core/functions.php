@@ -93,10 +93,6 @@ function user_menu() {
 	return $menu;
 }
 
-function santise($input) {
-	return filter_var($input, FILTER_SANITIZE_STRING);
-}
-
 function generate_csrf() {
 	$string = md5(openssl_random_pseudo_bytes(12));
 	$_SESSION["csrf"] = $string;
@@ -107,33 +103,105 @@ function validate_csrf($token) {
 	if ($token == $_SESSION["csrf"]) {
 		unset($_SESSION["csrf"]);
 		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 function restore_value($original, $posted) {
-	if ($posted !== null) {
+	if (!empty($posted)) {
 		return $posted;
-	} else {
-		return $original;
 	}
+	return $original;
 }
 
 function parse_to_checkbox($state) {
 	if ($state == 1) {
 		return ' checked="checked"';
-	} else {
-		return null;
 	}
+	return null;
 }
 
 function parse_from_checkbox($state) {
 	if ($state == "on") {
 		return 1;
-	} else {
-		return 0;
 	}
+	return 0;
+}
+
+function validate_str($str, $allowed = null) {
+	if (ctype_alnum(str_replace($allowed, '', $str))) {
+		return true;
+	}
+	return false;
+}
+
+function validate_length($str, $min, $max) {
+	if (strlen($str) >= $min and strlen($str) <= $max) {
+		return true;
+	}
+	return false;
+}
+
+function is_date( $str ) {
+    try {
+        $dt = new DateTime( trim($str) );
+    }
+    catch( Exception $e ) {
+        return false;
+    }
+    $month = $dt->format('m');
+    $day = $dt->format('d');
+    $year = $dt->format('Y');
+    if( checkdate($month, $day, $year) ) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function check_type($str, $type) {
+	
+	if (empty($str)) {
+		return true;
+	}
+	
+	switch ($type) {
+		
+		case "numeric":
+			if (!is_numeric($str)) {
+				return false;
+			}
+			break;
+
+		case "alphanum":
+			if (!ctype_alnum($str)) {
+				return false;
+			}
+			break;
+			
+		case "alpha":
+			if (!ctype_alpha($str)) {
+				return false;
+			}
+			break;
+			
+		case "text":
+			break;
+		
+		case "date":
+			if (!is_date($str)) {
+				return false;
+			}
+			break;
+			
+		case "username":
+			if(!ctype_alnum(str_replace(array("-", "_"), '', $str))) {
+				return false;
+			}
+		
+	}
+	return true;
 }
 
 ?>

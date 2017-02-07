@@ -7,10 +7,9 @@ if (!$_SESSION["access_admin_content"] > 0) {
 $page["title"] = 'Správa obsahu';
 
 $page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum');
-$page_type_ids = array(1 => 'page', 2 => 'talk', 3 => 'forum');
 
 if (isset($_POST["type"])) {
-	header("Location: admin.php?p=content-new-". $page_type_ids[$_POST["type"]]);
+	header("Location: admin.php?p=content-new-page&type=". $_POST["type"]);
 	die();
 }
 
@@ -58,7 +57,7 @@ if ($pages->num_rows > 0) {
 		$actions = null;
 		if ($row_page["access"] == 0) { $row_page["access"] = "všichni"; }
 		if ($_SESSION["access_admin_content_edit_all"] > 0 or ($_SESSION["access_admin_content_edit"] > 0 and $row_page["author"] == $_SESSION["id"])) {
-			$actions = '<a href="admin.php?p=content-edit-'. $page_type_ids[$row_page["type"]] .'&id='. $row_page["id"] .'" class="btn btn-default">Upravit</a>
+			$actions = '<a href="admin.php?p=content-edit-page&id='. $row_page["id"] .'" class="btn btn-default">Upravit</a>
 			<a href="admin.php?p=content-history&id='. $row_page["id"] .'" class="btn btn-primary">Historie</a>';
 		}
 		if ($_SESSION["access_admin_content_changeeditor"] > 0) {
