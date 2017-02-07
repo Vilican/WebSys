@@ -47,5 +47,3 @@ if (is_numeric($_POST["data"])) {
 }
 
 die("err");
-
-?>

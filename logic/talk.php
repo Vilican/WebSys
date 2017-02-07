@@ -241,5 +241,3 @@ if ($posts->num_rows > 0) {
 	$page["content"] .= $paging . '<input type="hidden" id="csrf-posts" value="'. $csrf_token .'">';
 	
 }
-
-?>

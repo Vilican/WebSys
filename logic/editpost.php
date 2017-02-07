@@ -80,5 +80,3 @@ if ($post["username"] != null) {
 }
 
 die("9");
-
-?>

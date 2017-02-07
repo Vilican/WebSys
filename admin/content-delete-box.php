@@ -38,4 +38,4 @@ if (isset($_GET["id"])) {
 	$page["content"] .= '<div class="alert alert-danger"><strong>Smazání: taková stránka neexistuje!</strong></div>';
 }
 
-} ?>
+}

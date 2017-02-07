@@ -28,5 +28,3 @@ switch ($_GET["p"]) {
 }
 
 require "template/admin.php";
-
-?>

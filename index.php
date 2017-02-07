@@ -65,5 +65,3 @@ if (in_array($_GET["p"], $sys_pages)) {
 	require "template/page.php";
 
 }
-
-?>

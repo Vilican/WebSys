@@ -203,5 +203,3 @@ function check_type($str, $type) {
 	}
 	return true;
 }
-
-?>

@@ -38,4 +38,4 @@ if ($_SESSION["access_admin_content_boxes"] > 0) {
 	$page["content"] .= '<div class="alert alert-danger"><strong>Vytvoření: chybí oprávnění!</strong></div>';
 }
 
-} ?>
+}

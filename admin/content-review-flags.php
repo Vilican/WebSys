@@ -124,4 +124,4 @@ if ($_SESSION["access_admin_content_review_flags"] > 0) {
 	$page["content"] = '<div class="alert alert-danger"><strong>Revize: chybí oprávnění!</strong></div>';
 }
 
-} ?>
+}

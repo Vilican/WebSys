@@ -109,4 +109,4 @@ if (isset($_GET["purge"]) and $_SESSION["access_admin_content_review_deleted_pur
 	$page["content"] = '<div class="alert alert-danger"><strong>Revize: chybí oprávnění!</strong></div>';
 }
 
-} ?>
+}

@@ -66,6 +66,4 @@ if ($sys["license"] == 2) {
 	$page["content"] .= '<form method="post"><p><input type="checkbox" name="whitelabel"'. parse_to_checkbox($sys["whitelabel"]) .'>Odstrantit zpětné odkazy</a></p><button type="submit" class="btn btn-primary btn-sm" name="submit">Uložit</button></form>';
 }
 
-
-
-} ?>
+}

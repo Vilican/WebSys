@@ -88,5 +88,3 @@ if ($location->num_rows > 0) {
 $mysql->query("INSERT INTO `posts` (`location`, `author`, `anon_author`, `content`) VALUES (". $mysql->quote($_POST["page"]) .", ". $author .", ". $purifier->purify($anon_author) .", ". $purifier->purify($mysql->quote($_POST["post"])) .");");
 
 die("9");
-
-?>

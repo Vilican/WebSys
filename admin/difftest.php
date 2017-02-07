@@ -41,4 +41,4 @@ $diff->build();
 
 $page["content"] .= $diff->getDifference();
 
-} ?>
+}

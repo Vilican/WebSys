@@ -49,5 +49,3 @@ $_SESSION['captcha'] = strtolower($chars);
 header('Content-type: image/png');
 imagepng($image);
 imagedestroy($image);
-
-?>

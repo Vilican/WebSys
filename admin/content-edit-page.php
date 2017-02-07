@@ -108,5 +108,3 @@ do {
 </table></form>';
 
 } while (0);
-
-?>
