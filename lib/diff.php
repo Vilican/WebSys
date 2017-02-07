@@ -284,7 +284,7 @@
 			$operations = array();
 			$matches = $this->MatchingBlocks();
 			$matches[] = new Match( count( $this->oldWords ), count( $this->newWords ), 0 );
-			foreach(  $matches as $i => $match ) {
+			foreach( $matches as $match ) {
 				$matchStartsAtCurrentPositionInOld = ( $positionInOld == $match->StartInOld );
 				$matchStartsAtCurrentPositionInNew = ( $positionInNew == $match->StartInNew );
 				$action = 'none';
@@ -394,4 +394,3 @@
 			$this->EndInNew = $endInNew;
 		}
 	}
-?>

@@ -84,4 +84,3 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
     else
         return bin2hex(substr($output, 0, $key_length));
 }
-?>

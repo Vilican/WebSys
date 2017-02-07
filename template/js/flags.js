@@ -4,7 +4,7 @@ function flag(data, post) {
 		data: { 'post' : post, 'data' : data, 'csrf' : document.getElementById('csrf-posts').value },
 		cache: false,
 		url: "logic/flags.php",
-		success: function(rt){
+		success: function(){
 			location.reload();
 		}
 	});
