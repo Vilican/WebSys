@@ -215,3 +215,7 @@ function check_type($str, $type) {
 	}
 	return true;
 }
+
+function santise($str) {
+	return filter_var($str, FILTER_SANITIZE_STRING);
+}

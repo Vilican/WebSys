@@ -6,10 +6,8 @@ if (!has_access("admin_content")) {
 
 $page["title"] = 'Správa obsahu';
 
-$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum');
-
 if (isset($_POST["type"])) {
-	header("Location: admin.php?p=content-new-page&type=". $_POST["type"]);
+	header("Location: admin.php?p=content-new-page&type=". santise($_POST["type"]));
 	die();
 }
 

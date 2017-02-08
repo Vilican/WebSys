@@ -3,7 +3,6 @@
 require "database.php";
 require "functions.php";
 require "config.php";
-require 'lib/htmlpurifer/HTMLPurifier.auto.php';
 
 $mysql = new DB();
 if (!$mysql->connect(_SRV, _USR, _PW, _DB)) {
@@ -15,9 +14,8 @@ while($setting = $settings->fetch_assoc()) {
 	$sys[$setting["setting"]] = $setting["value"];
 }
 
-$purifier = new HTMLPurifier();
-
 $flag_reasons = array(1 => "Tento příspěvek je nevhodný", 2 => "Tento příspěvek je mimo téma", 3 => "Tento příspěvek je zastaralý");
+$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum');
 
 if (isset($_SESSION["id"])) {
 	$mysql->update_activity($_SESSION["id"]);

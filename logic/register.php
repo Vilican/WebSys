@@ -79,7 +79,7 @@ if (isset($_POST["submit"])) {
 				$message .= $field["label"] ." - neplatný tvar!<br>";
 				$err = true;
 			}
-			$reg_values .= "`". $field["name"] ."` = ". $purifier->purify($mysql->quote($_POST[$field["name"]])) .", ";
+			$reg_values .= "`". $field["name"] ."` = ". santise($mysql->quote($_POST[$field["name"]])) .", ";
 		}
 	}
 	
