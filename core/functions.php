@@ -5,7 +5,8 @@ function throw_error($error_message) {
 	exit;
 }
 
-function menu(&$mysql) {
+function menu() {
+	global $mysql;
 	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1';");
 	if ($pages->num_rows > 0) {
 		while($menu_page = $pages->fetch_assoc()) {
@@ -19,7 +20,8 @@ function menu(&$mysql) {
 	return $menu;
 }
 
-function boxes(&$mysql) {
+function boxes() {
+	global $mysql;
 	$boxes = $mysql->query("SELECT `content`, `access` FROM `boxes` WHERE `visible` = 1 ORDER BY `ord` ASC;");
 	if ($boxes->num_rows > 0) {
 		while($box = $boxes->fetch_assoc()) {
@@ -32,46 +34,53 @@ function boxes(&$mysql) {
 	return $box_column;
 }
 
+function has_access($place) {
+	if (!isset($_SESSION["id"])) {
+		return false;
+	}
+	if ($_SESSION["access_". $place] > 0 or $_SESSION["id"] == 0) {
+		return true;
+	}
+	return false;
+}
+
 function admin_menu() {
 
-	if ($_SESSION["access_admin_content"] > 0) {
-	if ($_GET["p"] == "content") {
-		$menu .= "<li><a href='admin.php?p=content' class='act'>Správa obsahu</a></li>";
-	} else {
-		$menu .= "<li><a href='admin.php?p=content'>Správa obsahu</a></li>";
-	}
-	}
-	
-	if ($_SESSION["access_admin_content"] > 0) {
-	if ($_GET["p"] == "files") {
-		$menu .= "<li><a href='admin.php?p=files' class='act'>Správa souborů</a></li>";
-	} else {
-		$menu .= "<li><a href='admin.php?p=files'>Správa souborů</a></li>";
-	}
+	if (has_access("admin_content")) {
+		if ($_GET["p"] == "content") {
+			$menu .= "<li><a href='admin.php?p=content' class='act'>Správa obsahu</a></li>";
+		} else {
+			$menu .= "<li><a href='admin.php?p=content'>Správa obsahu</a></li>";
+		}
+		if ($_GET["p"] == "files") {
+			$menu .= "<li><a href='admin.php?p=files' class='act'>Správa souborů</a></li>";
+		} else {
+			$menu .= "<li><a href='admin.php?p=files'>Správa souborů</a></li>";
+		}
 	}
 	
-	if ($_SESSION["access_admin_users"] > 0) {
-	if ($_GET["p"] == "users") {
-		$menu .= "<li><a href='admin.php?p=users' class='act'>Správa uživatelů</a></li>";
-	} else {
-		$menu .= "<li><a href='admin.php?p=users'>Správa uživatelů</a></li>";
-	}
-	}
-	
-	if ($_SESSION["access_admin_roles"] > 0) {
-	if ($_GET["p"] == "groups") {
-		$menu .= "<li><a href='admin.php?p=groups' class='act'>Správa skupin</a></li>";
-	} else {
-		$menu .= "<li><a href='admin.php?p=groups'>Správa skupin</a></li>";
-	}
+	if (has_access("admin_users")) {
+		if ($_GET["p"] == "users") {
+			$menu .= "<li><a href='admin.php?p=users' class='act'>Správa uživatelů</a></li>";
+		} else {
+			$menu .= "<li><a href='admin.php?p=users'>Správa uživatelů</a></li>";
+		}
 	}
 	
-	if ($_SESSION["access_admin_settings"] > 0) {
-	if ($_GET["p"] == "sys") {
-		$menu .= "<li><a href='admin.php?p=sys' class='act'>Nastavení systému</a></li>";
-	} else {
-		$menu .= "<li><a href='admin.php?p=sys'>Nastavení systému</a></li>";
+	if (has_access("admin_roles")) {
+		if ($_GET["p"] == "groups") {
+			$menu .= "<li><a href='admin.php?p=groups' class='act'>Správa skupin</a></li>";
+		} else {
+			$menu .= "<li><a href='admin.php?p=groups'>Správa skupin</a></li>";
+		}
 	}
+	
+	if (has_access("admin_settings")) {
+		if ($_GET["p"] == "sys") {
+			$menu .= "<li><a href='admin.php?p=sys' class='act'>Nastavení systému</a></li>";
+		} else {
+			$menu .= "<li><a href='admin.php?p=sys'>Nastavení systému</a></li>";
+		}
 	}
 	
 	$menu .= "<li><a href='index.php'>Návrat na stránky</a></li>";
@@ -80,14 +89,17 @@ function admin_menu() {
 }
 
 function user_menu() {
-	
+	global $sys;
 	if (isset($_SESSION["id"])) {
 		$menu = "<p>Přihlášen: ". $_SESSION["username"] ."</p><p><a href='index.php?p=logout'>Odhlásit se</a><br><a href='index.php?p=settings'>Nastavení</a></p>";
-		if ($_SESSION["access_admin"]) {
+		if (has_access("admin")) {
 			$menu .= "<p><a href='admin.php'>Administrace</a></p>";
 		}
 	} else {
-		$menu = "<a href='index.php?p=login'>Přihlásit se</a><br><a href='index.php?p=reg'>Registrovat</a>";
+		$menu = "<a href='index.php?p=login'>Přihlásit se</a>";
+		if ($sys["regallowed"]) {
+			$menu .= "<br><a href='index.php?p=reg'>Registrovat</a>";
+		}
 	}
 	
 	return $menu;

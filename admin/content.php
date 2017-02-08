@@ -1,6 +1,6 @@
 <?php
 
-if (!$_SESSION["access_admin_content"] > 0) {
+if (!has_access("admin_content")) {
 	$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění ke vstupu do tohoto modulu!</strong></div>';
 } else {
 

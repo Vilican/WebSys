@@ -41,13 +41,13 @@ if (isset($_GET["update"])) {
 
 switch ($sys["license"]) {
 	case 0:
-		$page["content"] .= '<div class="alert alert-warning"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) pouze nekomerční použití<br>b) musí zobrazovat zpětný odkaz<br>c) změny kódu mimo designu nejsou povoleny</p></strong></div>';
+		$page["content"] .= '<div class="alert alert-warning"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) pouze nekomerční použití<br>b) musí zobrazovat zpětný odkaz</p></strong></div>';
 		break;
 	case 1:
-		$page["content"] .= '<div class="alert alert-info"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) komerční použití je povoleno<br>b) musí zobrazovat zpětný odkaz<br>c) změny kódu mimo designu nejsou povoleny</p></strong></div>';
+		$page["content"] .= '<div class="alert alert-info"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) komerční použití je povoleno<br>b) musí zobrazovat zpětný odkaz</p></strong></div>';
 		break;
 	case 2:
-		$page["content"] .= '<div class="alert alert-success"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován<br>c) změny v kódu jsou povoleny</p></strong></div>';
+		$page["content"] .= '<div class="alert alert-success"><strong><p>Systém na této doméně používá tuto licenci:</p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován</p></strong></div>';
 		break;
 }
 

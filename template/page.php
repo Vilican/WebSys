@@ -27,7 +27,7 @@
 </div>
 <div class="collapse navbar-collapse">
 <ul class='nav navbar-nav'>
-<?php echo menu($mysql); ?>
+<?php echo menu(); ?>
 </ul>
 </div>
 </div>
@@ -43,7 +43,7 @@
 </div>
 </div>
 <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-<?php echo boxes($mysql); ?>
+<?php echo boxes(); ?>
 </div>
 </div>
 <hr class="ft">

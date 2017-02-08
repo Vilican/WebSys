@@ -2,7 +2,7 @@
 
 do {
 
-	if (!$_SESSION["access_admin_content"] > 0) {
+	if (!has_access("admin_content")) {
 		$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění ke vstupu do tohoto modulu!</strong></div>';
 		break;
 	}
@@ -23,7 +23,7 @@ do {
 	
 	$pg = $pg->fetch_assoc();
 
-	if (!$_SESSION["access_admin_content_edit_all"] > 0 and !($_SESSION["access_admin_content_edit"] > 0 and $pg["author"] == $_SESSION["id"])) {
+	if (!has_access("admin_content_edit_all") and !(has_access("admin_content_edit") and $pg["author"] == $_SESSION["id"])) {
 		$page["content"] .= '<div class="alert alert-danger"><strong>Editace: chybí oprávnění!</strong></div>';
 		break;
 	}
@@ -86,7 +86,7 @@ do {
 			break;
 		}
 
-		$mysql->query("UPDATE `pages` SET `id` = ". $mysql->quote($_POST["id"]) .", `title` = ". $purifier->purify($mysql->quote($_POST["title"])) .",	`content` = ". $mysql->quote($_POST["content"]) .", `description` = ". $purifier->purify($mysql->quote($_POST["description"])) .", `ord` = ". $mysql->quote($_POST["ord"]) .", `visible` = ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", `access` = ". $mysql->quote($_POST["access"]) . mysql_page_fields($pg["type"], $mysql) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
+		$mysql->query("UPDATE `pages` SET `id` = ". $mysql->quote($_POST["id"]) .", `title` = ". $purifier->purify($mysql->quote($_POST["title"])) .",	`content` = ". $mysql->quote($_POST["content"]) .", `description` = ". $purifier->purify($mysql->quote($_POST["description"])) .", `ord` = ". $mysql->quote($_POST["ord"]) .", `visible` = ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", `access` = ". $mysql->quote($_POST["access"]) . mysql_page_fields($pg["type"]) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
 		$mysql->query("INSERT INTO `phistory` (`page`, `content`, `author`) VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote($_SESSION["id"]) .");");
 		$message = '<div class="alert alert-success"><strong>Stránka upravena</strong></div>';
 		$pg = $mysql->query("SELECT * FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";")->fetch_assoc();
@@ -102,7 +102,7 @@ do {
 <tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. restore_value($pg["content"], $_POST["content"]) .'</textarea></td></tr>
 <tr><td>Pořadí:</td><td><input type="text" name="ord" class="form-control" value="'. restore_value($pg["ord"], $purifier->purify($_POST["ord"])) .'"></td></tr>
 <tr><td>Přístup čtení:</td><td><input type="text" name="access" class="form-control" value="'. restore_value($pg["access"], $purifier->purify($_POST["access"])) .'"></td></tr>
-'. show_page_fields($pg["type"], $pg, $purifier) .'
+'. show_page_fields($pg["type"], $pg) .'
 <tr><td>Viditelnost:</td><td><input type="checkbox" name="visibility" class="form-control"'. parse_to_checkbox($pg["visible"]) .'></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Upravit" class="btn btn-default"></td></tr>
 </table></form>';

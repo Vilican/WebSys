@@ -20,20 +20,25 @@ if (in_array($_GET["p"], $sys_pages)) {
 			require "template/login.php";
 			break;
 		case "reg":
-			require "logic/register.php";
-			require "template/register.php";
+			if ($sys["regallowed"]) {
+				require "logic/register.php";
+				require "template/register.php";
+				break;
+			}
+			$page["title"] = "Zamítnuto";
+			$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění pro zobrazení stránky!</strong></div>';
+			require "template/page.php";
 			break;
 		case "logout":
 			session_unset();
 			session_destroy();
 			header("Location: index.php");
-			die();
-			break;
+			exit;
 	}
 	
 } else {
 
-	$page = mysqli_fetch_assoc($mysql->query("SELECT * FROM `pages` WHERE `id` = ". $mysql->quote($_GET["p"]) .";"));
+	$page = $mysql->query("SELECT * FROM `pages` WHERE `id` = ". $mysql->quote($_GET["p"]) .";")->fetch_assoc();
 	
 	if(empty($page)) {
 		

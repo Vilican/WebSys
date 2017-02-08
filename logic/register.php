@@ -28,7 +28,7 @@ if ($sys["regcaptcha"] == "1") {
 
 if (isset($_POST["submit"])) {
 	
-	if (strtolower($_SESSION['captcha']) != strtolower($_POST["captcha"]) and $sys["regcaptcha"] == "1") {
+	if (strtolower($_SESSION['captcha']) != strtolower($_POST["captcha"]) and $sys["regcaptcha"]) {
 		$message .= "Captcha kód nesouhlasí!<br>";
 		$err = true;
 	}

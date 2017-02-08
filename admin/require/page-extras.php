@@ -1,6 +1,8 @@
 <?php
 
-function show_page_fields($type, $pg, &$purifier) {
+function show_page_fields($type, $pg) {
+	
+	global $purifier;
 	
 	switch ($type) {
 		
@@ -38,7 +40,9 @@ function validate_page_fields($type) {
 
 }
 
-function mysql_page_fields($type, &$mysql) {
+function mysql_page_fields($type) {
+	
+	global $mysql;
 	
 	switch ($type) {
 		
