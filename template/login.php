@@ -11,5 +11,3 @@ $page["content"] = $message . '
 </table></form>';
 
 require "template/page.php";
-
-?>
