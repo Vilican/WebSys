@@ -4561,7 +4561,7 @@ body.modal-open {
 }
 .modal-header {
     padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, .81);
+    border-bottom: 1px solid black;
     min-height: 16.43px
 }
 .modal-header .close {
@@ -4581,17 +4581,15 @@ body.modal-open {
     position: absolute
 }
 .modal-footer {
-    margin-top: 15px;
     padding: 19px 20px 20px;
-    text-align: right;
-    border-top: 1px solid rgba(255, 255, 255, .81)
+    text-align: right
 }
 .tooltip.top .tooltip-arrow,
 .tooltip.top-left .tooltip-arrow,
 .tooltip.top-right .tooltip-arrow {
     bottom: 0;
     border-width: 5px 5px 0;
-    border-top-color: rgba(44, 201, 144, .8)
+    border-top-color: grey
 }
 .modal-footer:after,
 .modal-footer:before {
@@ -4656,7 +4654,7 @@ body.modal-open {
     color: #fff;
     text-align: center;
     text-decoration: none;
-    background-color: rgba(44, 201, 144, .8);
+    background-color: grey;
     border-radius: 0
 }
 .tooltip-arrow {
@@ -4680,20 +4678,20 @@ body.modal-open {
     left: 0;
     margin-top: -5px;
     border-width: 5px 5px 5px 0;
-    border-right-color: rgba(44, 201, 144, .8)
+    border-right-color: grey
 }
 .tooltip.left .tooltip-arrow {
     top: 50%;
     right: 0;
     margin-top: -5px;
     border-width: 5px 0 5px 5px;
-    border-left-color: rgba(44, 201, 144, .8)
+    border-left-color: grey
 }
 .tooltip.bottom .tooltip-arrow,
 .tooltip.bottom-left .tooltip-arrow,
 .tooltip.bottom-right .tooltip-arrow {
     border-width: 0 5px 5px;
-    border-bottom-color: rgba(44, 201, 144, .8);
+    border-bottom-color: grey;
     top: 0
 }
 .tooltip.bottom .tooltip-arrow {
@@ -5838,4 +5836,7 @@ th, td {
 }
 .diffmod {
 	background-color:yellow
+}
+#acts {
+	margin-left: 5px
 }

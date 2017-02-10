@@ -10,10 +10,10 @@ if ($userfields->num_rows > 0) {
 	while ($field = $userfields->fetch_assoc()) {
 		
 		if ($field["type"] == "text") {
-			$reg_fields .= '<tr><td>'. $field["label"] .':</td><td><textarea name="'. $field["name"] .'" class="form-control" value="'. $_POST[$field["name"]] .'"></textarea></td></tr>';
+			$reg_fields .= '<tr><td>'. $field["label"] .':</td><td><textarea name="'. $field["name"] .'" class="form-control">'. santise($_POST[$field["name"]]) .'</textarea></td></tr>';
 			continue;
 		}
-		$reg_fields .= '<tr><td>'. $field["label"] .':</td><td><input type="text" name="'. $field["name"] .'" class="form-control" value="'. $_POST[$field["name"]] .'"></td></tr>';
+		$reg_fields .= '<tr><td>'. $field["label"] .':</td><td><input type="text" name="'. $field["name"] .'" class="form-control" value="'. santise($_POST[$field["name"]]) .'"></td></tr>';
 		
 	}
 }

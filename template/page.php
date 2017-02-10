@@ -58,8 +58,6 @@ Vytvořil <?php echo $sys["author"]; ?><?php if (!$unbranded) { echo ' pomocí <
 <script src="template/js/offcanvas.js"></script>
 <script src="template/js/nicescroll.js"></script>
 <script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 100}); });</script>
-<?php if ($sendpost) { echo '<script src="template/js/sendpost.js"></script>'; } ?>
-<?php if ($editpost) { echo '<script src="template/js/editpost.js"></script>'; } ?>
-<?php if ($jsflag) { echo '<script src="template/js/flags.js"></script>'; } ?>
+<?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
 </body>
 </html>

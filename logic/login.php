@@ -11,7 +11,7 @@ if (isset($_POST["submit"])) do {
 		break;
 	}
 	
-	$user = $mysql->query("SELECT * FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `deleted` = 0 AND `loginname`= ". $mysql->quote($_POST["user"]) .";");
+	$user = $mysql->query("SELECT * FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `loginname`= ". $mysql->quote($_POST["user"]) .";");
 	
 	if ($user->num_rows < 1) {
 		$message = '<div class="alert alert-danger"><strong>Chybné jméno nebo heslo!</strong></div>';
