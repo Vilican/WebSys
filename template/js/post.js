@@ -1,18 +1,14 @@
-function enableModalButtons() {
+function hideModal(reload) {
+  $("#modal").modal("hide");
+  document.getElementById("modal").innerHTML = null;
+  if (reload) {
+	location.reload();
+  }
+}
+
+function enableFinishButtons() {
 	if (document.getElementById("stop")) {
 		document.getElementById("stop").addEventListener("click", function(){ hideModal(false); }, false);
-	}
-	if (document.getElementById("deletepost")) {
-		document.getElementById("deletepost").addEventListener("click", function(){ doPost({ "act" : "delpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value, "permanent" : 0}); }, false);
-	}
-	if (document.getElementById("deletepostperm")) {
-		document.getElementById("deletepostperm").addEventListener("click", function(){ doPost({ "act" : "delpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value, "permanent" : 1}); }, false);
-	}
-	if (document.getElementById("editpost")) {
-		document.getElementById("editpost").addEventListener("click", function(){ doPost( $.param( { "act" : "editpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value} ) + "&" + $("form").serialize() ); }, false);
-	}
-	if (document.getElementById("flagpost")) {
-		document.getElementById("flagpost").addEventListener("click", function(){ doPost({ "act" : "flagpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value}); }, false);
 	}
 	if (document.getElementById("stopreload")) {
 		document.getElementById("stopreload").addEventListener("click", function(){ hideModal(true); }, false);
@@ -26,17 +22,25 @@ function doPost(data) {
 	url: window.location.href + "&mod",
 	success(data){
 		document.getElementById("modal").innerHTML = data;
-		enableModalButtons();
+		enableFinishButtons();
 	}
   });
 }
 
-function hideModal(reload) {
-  $("#modal").modal("hide");
-  document.getElementById("modal").innerHTML = null;
-  if (reload) {
-	location.reload();
-  }
+function enableModalButtons() {
+	enableFinishButtons();
+	if (document.getElementById("deletepost")) {
+		document.getElementById("deletepost").addEventListener("click", function(){ doPost({ "act" : "delpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value, "permanent" : 0}); }, false);
+	}
+	if (document.getElementById("deletepostperm")) {
+		document.getElementById("deletepostperm").addEventListener("click", function(){ doPost({ "act" : "delpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value, "permanent" : 1}); }, false);
+	}
+	if (document.getElementById("editpost")) {
+		document.getElementById("editpost").addEventListener("click", function(){ doPost( $.param( { "act" : "editpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value} ) + "&" + $("form").serialize() ); }, false);
+	}
+	if (document.getElementById("flagpost")) {
+		document.getElementById("flagpost").addEventListener("click", function(){ doPost({ "act" : "flagpost", "post" : document.getElementById("target").value, "csrf" : document.getElementById("csrf").value}); }, false);
+	}
 }
 
 function postPrep(action, attribute) {
