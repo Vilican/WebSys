@@ -28,40 +28,47 @@ do {
 		break;
 	}
 	
-	if ($_GET["a"] = "ch" and is_numeric($_GET["r"])) do {
-		
-		// TODO: REVIEW AND REPAIR
+	if ($_GET["a"] == "ch" and is_numeric($_GET["r"])) do {
 		
 		require "lib/diff.php";
-		$records = $mysql->query("SELECT `phistory`.*, `users`.`username` FROM `phistory` INNER JOIN `users` ON `phistory`.`author` = `users`.`id` WHERE `phistory`.`page` = ". $mysql->quote($pg["id"]) ." ORDER BY `time` ASC LIMIT 2 OFFSET ". ($_GET["r"] - 1) .";");
 		
-		if ($records->num_rows == 1 or $_GET["r"] == 1) {
+		$records = $mysql->query("SELECT `phistory`.*, `users`.`username` FROM `phistory` INNER JOIN `users` ON `phistory`.`author` = `users`.`id` WHERE `phistory`.`page` = ". $mysql->quote($pg["id"]) ." AND `phistory`.`id` <= ". $mysql->quote($_GET["r"]) ." ORDER BY `time` DESC LIMIT 2;");
+		
+		if ($records->num_rows == 1) {
 			$record = $records->fetch_assoc();
-			$page["content"] .= 'Provedl uživatel '. $record["username"] .', '. date("j.n.Y G:i", strtotime($record["time"])) .' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $record["id"] .'" class="btn btn-danger btn-sm separate-horizontal">Vrátit k této editaci</a><hr style="">'. $page["content"];
-			break;
+			$page["content"] .= '<p>Provedl uživatel '. $record["username"] .', '. date("j.n.Y G:i", strtotime($record["time"])) .' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $record["id"] .'&csrf='. generate_csrf() .'" class="btn btn-danger btn-sm separate-horizontal">Zrušit editaci (a následující)</a></p><em>Stránka byla při této editaci vytvořena.</em><hr style="">'. $record["content"];
 		}
 		
 		if ($records->num_rows > 1) {
-			while ($record = $records->fetch_assoc()) {
-				
+			for ($i = 1; $i <= $records->num_rows; $i++) {
+				if ($i == 1) {
+					$string_new = $records->fetch_assoc();
+					continue;
+				}
+				$string_old = $records->fetch_assoc();
 			}
 			
-			$page["content"] .= 'Provedl uživatel '. $new["username"] .', '. date("j.n.Y G:i", strtotime($new["time"])) .' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $new["id"] .'" class="btn btn-danger btn-sm separate-horizontal">Vrátit k této editaci</a><hr style="">';
+			$page["content"] .= '<p>Provedl uživatel '. $string_new["username"] .', '. date("j.n.Y G:i", strtotime($string_new["time"])) .' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $string_new["id"] .'&csrf='. generate_csrf() .'" class="btn btn-danger btn-sm separate-horizontal">Zrušit editaci (a následující)</a></p><em>V rozdílech se nemusí zobrazovat změny formátování.</em><hr style="">';
 			
-			$diff = new HtmlDiff($string_old, $string_new);
+			$diff = new HtmlDiff($string_old["content"], $string_new["content"]);
 			$diff->build();
-			$page["content"] .= $diff->getDifference();
-			break;
-			
+			$page["content"] .= $diff->getDifference();			
 		}
 		
 		break(2);
 		
 	} while(0);
 	
-	if ($_GET["a"] = "rv" and is_numeric($_GET["r"])) do {
+	if ($_GET["a"] == "rv" and is_numeric($_GET["r"]) and validate_csrf($_GET["csrf"]) and has_access("admin_content_revert")) do {
 		
-		// TODO: REVERT EDIT
+		$rec = $mysql->query("SELECT `content` FROM `phistory` WHERE `id` < ". $mysql->quote($_GET["r"]) ." ORDER BY `id` DESC LIMIT 1;");
+		if ($rec->num_rows == 0) {
+			break;
+		}
+		$rec = $rec->fetch_assoc();
+		$mysql->query("UPDATE `pages` SET `content` = ". $mysql->quote($rec["content"]) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
+		$mysql->query("INSERT INTO `phistory` (`page`, `content`, `author`) VALUES (". $mysql->quote($_GET["id"]) .", ". $mysql->quote($rec["content"]) .", ". $mysql->quote($_SESSION["id"]) .");");
+		$page["content"] .= '<div class="alert alert-success"><strong>Vráceno</strong></div>';
 		
 		break(2);
 		
@@ -71,9 +78,10 @@ do {
 	$history = $mysql->query("SELECT `phistory`.*, `users`.`username` FROM `phistory` INNER JOIN `users` ON `phistory`.`author` = `users`.`id` WHERE `phistory`.`page` = ". $mysql->quote($pg["id"]) ." ORDER BY `time` DESC;");
 	if ($history->num_rows > 0) {
 		$i = $history->num_rows;
+		$csrf_token = generate_csrf();
 		while ($record = $history->fetch_assoc()) {
 			if (has_access("admin_content_revert")) {
-				$revert = ' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $record["id"] .'" class="btn btn-danger btn-sm">Vrátit k této editaci</a>';
+				$revert = ' <a href="admin.php?p=content-history&id='. $pg["id"] .'&a=rv&r='. $record["id"] .'&csrf='. $csrf_token .'" class="btn btn-danger btn-sm">Zrušit editaci (a následující)</a>';
 			} else {
 				$revert = null;
 			}	

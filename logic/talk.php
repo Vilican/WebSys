@@ -46,9 +46,9 @@ if ($post_count > $sys["paging"]) {
 	for ($i = 1; $i <= $page_count; $i++) {
 		if ($_GET["page"] == $i) {
 			$paging .= '<li class="active"><a href="index.php?p='. santise($_GET["p"]) .'&page='. $i .'">'. $i .'</a></li>';
-		} else {
-			$paging .= '<li><a href="index.php?p='. santise($_GET["p"]) .'&page='. $i .'">'. $i .'</a></li>';
+			continue;
 		}
+		$paging .= '<li><a href="index.php?p='. santise($_GET["p"]) .'&page='. $i .'">'. $i .'</a></li>';
 	}
 	$paging .= '</ul>';
 }

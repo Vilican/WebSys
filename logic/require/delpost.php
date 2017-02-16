@@ -3,7 +3,7 @@
 if (!$act) {
 	
 	if (has_access("posts_delete_permanent")) {
-		$del_perm = ' <button type="button" class="btn btn-danger" id="deletepostperm">Trvale smazat</button>';
+		$del_perm = ' <button type="button" class="btn btn-danger" id="deletepostperm">Odstranit</button>';
 	}
 	
 	echo '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">Smazání</h4></div><div class="modal-body">
@@ -29,4 +29,4 @@ if ($_POST["permanent"] == 1 and has_access("posts_delete_permanent")) {
 }
 
 echo '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">Smazání</h4></div><div class="modal-body">
-<p>Příspěvek byl odstraněn</p></div><div class="modal-footer"><button type="button" id="stopreload" class="btn btn-primary">OK</button></div></div></div>';
+<p>Příspěvek byl smazán</p></div><div class="modal-footer"><button type="button" id="stopreload" class="btn btn-primary">OK</button></div></div></div>';

@@ -4458,7 +4458,7 @@ a.list-group-item:hover {
     padding: 19px;
     margin-bottom: 20px;
     background-color: #fafcfd;
-	border: 0.1px dotted black !important
+	border: 1px solid #c4c4c4 !important
 }
 .well blockquote {
     border-color: #ddd;
