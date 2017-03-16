@@ -46,20 +46,13 @@ if (in_array($_GET["p"], $sys_pages)) {
 		$page["content"] = '<div class="alert alert-danger"><strong>Taková stránka neexistuje!</strong></div>';
 		
 	} elseif ($page["access"] == 0 or $page["access"] <= $_SESSION["level"]) {
-	
-		switch ($page["type"]) {
 		
-			case 1:
-				break;
-			case 2:
-				require "logic/talk.php";
-				break;
+		$page_type_map = array(2 => "logic/talk.php", 3 => "logic/forum.php");
 		
-			default:
-				throw_error("Stránka nese neplatný typový identifikátor!");
-		
+		if (!empty($page_type_map[$page["type"]])) {
+			require $page_type_map[$page["type"]];
 		}
-	
+		
 	} else {
 		
 		$page["title"] = "Zamítnuto";

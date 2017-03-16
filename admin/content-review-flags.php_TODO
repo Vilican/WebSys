@@ -1,0 +1,88 @@
+<?php
+
+do {
+	
+	if (!has_access("admin_content") or !has_access("admin_content_review_flags")) {
+		$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění ke vstupu do tohoto modulu!</strong></div>';
+		break;
+	}
+	
+	$page["title"] = 'Správa obsahu - nahlášené příspěvky';
+	$page["content"] .= "<p>Tyto příspěvky byly nahlášeny. Zde můžete nahlášení zamítnout nebo příspěvky zlikvidovat.</p>";
+	
+	if (!isset($_GET["page"]) or !is_numeric($_GET["page"])) {
+		$_GET["page"] = 1;
+	}
+	
+	$post_count = $mysql->query("SELECT DISTINCT `post` FROM `flags`;")->num_rows;
+	
+	if ($post_count == 0) {
+		$page["content"] = '<div class="alert alert-info"><strong>Revize: žádné příspěvky k revizi</strong></div><a href="admin.php?p=content" class="btn btn-primary">Zpět</a>';
+		break;
+	}
+	
+	// TODO: better pagination
+	if ($post_count > $sys["paging"]) {
+		$page_count = ceil($post_count / $sys["paging"]);
+		$paging = '<p>Stránky: ';
+		for ($i = 1; $i <= $page_count; $i++) {
+			if ($_GET["page"] == $i) {
+				$paging .= '<a href="admin.php?p=content-review-flags&page='. $i .'" class="btn btn-warning btn-sm">'. $i .'</a> ';
+				continue;
+			}
+			$paging .= '<a href="admin.php?p=content-review-flags&page='. $i .'" class="btn btn-primary btn-sm">'. $i .'</a> ';
+		}
+		$paging .= '</p>';
+	}
+	
+	$posts = $mysql->query("SELECT DISTINCT `posts`.*, `users`.`id`, `users`.`username`, `roles`.`color`, `roles`.`level`, `pages`.`title`, `topics`.`name`
+	FROM `flags` INNER JOIN	`posts` ON `flags`.`post` = `posts`.`post_id`
+	INNER JOIN `pages` ON `posts`.`location` = `pages`.`id`
+	LEFT JOIN `topics` ON `posts`.`sublocation` = `topics`.`id`
+	LEFT JOIN `users` ON `posts`.`author` = `users`.`id`
+	LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id`
+	ORDER BY `time` DESC
+	LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
+	
+	$page["content"] .= $paging;
+	
+	while ($post = $posts->fetch_assoc()) {
+		
+		if (empty($post["username"])) {
+			if (has_access("posts_showip")) {
+				$post["username"] = '<i data-toggle="tooltip" title="IP: '. $post["anon_ip"] .'">'. $post["anon_author"] .'</i>';
+			} else {
+				$post["username"] = '<i data-toggle="tooltip" title="Neregistrován">'. $post["anon_author"] .'</i>';
+			}
+			$post["color"] = "grey";
+		} else {
+			$post["username"] = '<span style="color:'. $post["color"] .'">'. $post["username"] .'</span>';
+		}
+		
+		if (!empty($post["name"])) {
+			$post["name"] = " | vlákno/místnost". $post["name"];
+		}
+		
+		$flaggers = $mysql->query("SELECT `users`.`username` FROM `flags` INNER JOIN `users` ON `flags`.`user` = `users`.`id`;");
+		
+		$flaggers_list = null;
+		while ($flagger = $flaggers->fetch_assoc()) {
+			$flaggers_list .= $flagger["username"] .", ";
+		}
+		
+		$footer = 'Uživatelé, kteří nahlásili příspěvek: '. substr($flaggers_list, 0, -2) .'<br><button class="btn btn-primary btn-xs">Zobrazit příspěvek</button> <button class="btn btn-warning btn-xs">Upravit příspěvek</button> <button class="btn btn-danger btn-xs">Odstranit příspěvek</button> <button class="btn btn-danger btn-xs">Zamítnout nahlášení</button>';
+		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">autor '. $post["username"] .' | stránka '. $post["title"] . $thread .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. $post["content"] .'</div><div class="panel-footer panel-footer-warn">'. $footer .'</div></div>';
+		
+	}
+	
+	$page["content"] .= $paging;
+	
+} while(0);
+
+// REJECT
+#$mysql->query("UPDATE `users` SET `flags_incorrect` = `flags_incorrect` + 1 WHERE `id` IN (". implode(',', array_map('intval', $users)) .");");
+#$mysql->query("DELETE FROM `flags` WHERE `post` = ". $mysql->quote($_GET["pid"]) .";");
+
+// ACCEPT
+#$mysql->query("UPDATE `users` SET `flags_correct` = `flags_correct` + 1 WHERE `id` IN (". implode(',', array_map('intval', $users)) .");");
+#$mysql->query("DELETE FROM `flags` WHERE `post` = ". $mysql->quote($_GET["pid"]) .";");

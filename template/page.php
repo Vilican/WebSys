@@ -59,5 +59,6 @@ Vytvořil <?php echo $sys["author"]; ?><?php if (!$unbranded) { echo ' pomocí <
 <script src="template/js/nicescroll.js"></script>
 <script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 100}); });</script>
 <?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
+<?php if ($jsthread) { echo '<script src="template/js/thread.js"></script>'; } ?>
 </body>
 </html>

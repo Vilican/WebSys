@@ -219,3 +219,20 @@ function check_type($str, $type) {
 function santise($str) {
 	return filter_var($str, FILTER_SANITIZE_STRING);
 }
+
+function id_to_user($identificator) {
+	
+	global $mysql;
+	
+	$user = $mysql->query("SELECT `users`.`id`, `users`.`username`, `roles`.`color` FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `users`.`id` = ". $mysql->quote($identificator) ." OR `users`.`username` = ". $mysql->quote($identificator) .";");
+	
+	if ($user->num_rows > 0) {
+		
+		$user = $user->fetch_assoc();
+		return '<a href="index.php?p=profile&id='. $user["id"] .'" style="color:'. $user["color"] .'">'. $user["username"] .'</a>';
+		
+	}
+	
+	return false;
+	
+}

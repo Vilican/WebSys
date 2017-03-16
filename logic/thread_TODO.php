@@ -5,7 +5,7 @@ if (!defined("_PW")) {
 }
 
 if (isset($_GET["mod"])) {
-	require "logic/post.php";
+	require "logic/postthread.php";
 	die();
 }
 
@@ -30,15 +30,15 @@ do {
 	}
 	
 	if ($_GET["act"] == "add") {
-		require "logic/require/addpost.php";
+		require "logic/require/addpost-thread.php";
 		break;
 	}
 	
-	$page["content"] .= '<a href="index.php?p='. santise($_GET["p"]) .'&page='. $_GET["page"] .'&act=add" class="btn btn-sm btn-default">Přidat příspěvek</a><hr>';
+	$page["content"] .= '<a href="index.php?p='. santise($_GET["p"]) .'&th='. santise($_GET["th"]) .'&page='. $_GET["page"] .'&act=add" class="btn btn-sm btn-default">Přidat příspěvek</a><hr>';
 	
 } while (0);
 
-$post_count = $mysql->query("SELECT `posts`.`post_id` FROM `posts` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `deleted` = 0;")->num_rows;
+$post_count = $mysql->query("SELECT `posts`.`post_id` FROM `posts` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `sublocation` = ". $mysql->quote($_GET["th"]) ." AND `deleted` = 0;")->num_rows;
 
 if ($post_count > $sys["paging"]) {
 	$page_count = ceil($post_count / $sys["paging"]);
