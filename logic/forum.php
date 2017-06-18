@@ -39,22 +39,19 @@ do {
 		$paging .= '</ul>';
 	}
 	
-	$topics = $mysql->query("SELECT `topics`.`id`, `topics`.`name`, `topics`.`user`, `users`.`username`, `roles`.`color` FROM `topics` LEFT JOIN `users` ON `topics`.`user` = `users`.`id` LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `topics`.`location` = ". $mysql->quote($page["id"]) ." AND `deleted` = 0 ORDER BY `topics`.`lastact` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
+	$topics = $mysql->query("SELECT `topics`.`id`, `topics`.`name` FROM `topics` WHERE `topics`.`location` = ". $mysql->quote($page["id"]) ." AND `deleted` = 0 ORDER BY `topics`.`lastact` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
 	
 	if ($topics->num_rows > 0) {
 		
 		if (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"])) {
-			$page["content"] .= '<p><button type="button" class="btn btn-primary btn-sm thread-add">Přidat místnost</button></p>';
+			$page["content"] .= '<p><button type="button" class="btn btn-default btn-sm thread-add">Přidat téma</button></p>';
+			$jsthread = true;
 		}
 		
-		$page["content"] .= '<p class="text-smaller">Správce fóra: '. id_to_user($page["author"]) .'</p>'. $paging .'<div class="list-group">';
+		$page["content"] .= $paging .'<div class="list-group">';
 		
 		while ($topic = $topics->fetch_assoc()) {
-			
-			if (!empty($topic["username"])) {
-				$topic["username"] = '<p class="list-group-item-text">Moderátor: <span style="color:'. $topic["color"] .'">'. $topic["username"] .'</span></p>';
-			}
-			
+						
 			$actions = null;
 			if (has_access("thread_edit") or ($page["author"] == $_SESSION["id"] and isset($_SESSION["id"])) or ($topic["user"] == $_SESSION["id"] and isset($_SESSION["id"]))) {
 				$actions = '<img src="template/img/edit.png" class="icon thread-edit" data-toggle="tooltip" title="Upravit" alt="Upravit" data-postid="'. $topic["id"] .'">&nbsp;';
@@ -66,7 +63,7 @@ do {
 				$jsthread = true;
 			}
 			
-			$page["content"] .= '<a href="index.php?p='. $page["id"] .'&th='. $topic["id"] .'" class="list-group-item"><p class="list-group-item-heading">'. $topic["name"] .'<span class="rfloat">'. $actions .'</span></p>'. $topic["username"] .'</a>';
+			$page["content"] .= '<a href="index.php?p='. $page["id"] .'&th='. $topic["id"] .'" class="list-group-item mgdown"><p class="list-group-item-heading">'. $topic["name"] .'<span class="rfloat">'. $actions .'</span></p></a>';
 			
 		}
 		

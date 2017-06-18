@@ -15,10 +15,10 @@ if (isset($_GET["update"])) {
 	}
 
 	if (ini_get('allow_url_fopen')) {
-		$lic_lvl = file_get_contents('https://sufix.cz/ws-lic/?domain='. $lic_domain);
+		$lic_lvl = file_get_contents('https://www.sufix.cz/ws-lic/?domain='. $lic_domain);
 	} elseif (function_exists('curl_version')) {
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'https://sufix.cz/ws-lic/?domain='. $lic_domain);
+		curl_setopt($ch, CURLOPT_URL, 'https://www.sufix.cz/ws-lic/?domain='. $lic_domain);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$lic_lvl = curl_exec($ch);
 		curl_close($ch);
@@ -52,7 +52,7 @@ switch ($sys["license"]) {
 }
 
 if ($sys["license"] < 2) {
-	$page["content"] .= '<a href="" class="btn btn-danger">Koupit upgrade</a> <a href="admin.php?p=settings-license&update" class="btn btn-primary">Aktualizovat licenci</a>';
+	$page["content"] .= '<a href="https://websys.sufix.cz/store" class="btn btn-danger">Koupit upgrade</a> <a href="admin.php?p=settings-license&update" class="btn btn-primary">Aktualizovat licenci</a>';
 }
 
 if ($sys["license"] == 2) {
@@ -63,7 +63,8 @@ if ($sys["license"] == 2) {
 		die();
 	}
 
-	$page["content"] .= '<form method="post"><p><input type="checkbox" name="whitelabel"'. parse_to_checkbox($sys["whitelabel"]) .'>Odstrantit zpětné odkazy</a></p><button type="submit" class="btn btn-primary btn-sm" name="submit">Uložit</button></form>';
+	$page["content"] .= '<form method="post"><p><input type="checkbox" name="whitelabel"'. parse_to_checkbox($sys["whitelabel"]) .'>Odstrantit zpětné odkazy</a></p><button type="submit" class="btn btn-primary btn-sm" name="submit">Uložit</button></form>
+	<br><a href="admin.php?p=settings-license&update" class="btn btn-default">Aktualizovat licenci</a>';
 }
 
 }

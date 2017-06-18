@@ -4,8 +4,12 @@ if (!defined("_PW")) {
 	die();
 }
 
+if ($mysql->query("SELECT `id` FROM `topics` WHERE `id` = ". $mysql->quote($_GET["th"]) ." AND `deleted` = 0;")->num_rows == 0) {
+	die();
+}
+
 if (isset($_GET["mod"])) {
-	require "logic/postthread.php";
+	require "logic/post.php";
 	die();
 }
 
@@ -17,7 +21,9 @@ if (!isset($_GET["page"]) or !is_numeric($_GET["page"])) {
 	$_GET["page"] = 1;
 }
 
-$csrf_token = generate_csrf();
+if (!isset($_POST["ap"])) {
+	$csrf_token = generate_csrf();
+}
 
 do {
 	
@@ -53,7 +59,7 @@ if ($post_count > $sys["paging"]) {
 	$paging .= '</ul>';
 }
 
-$posts = $mysql->query("SELECT `posts`.`post_id`, `posts`.`author`, `posts`.`anon_author`, `posts`.`anon_ip`, `posts`.`content`, `posts`.`time`, `users`.`username`, `roles`.`level`, `roles`.`color` FROM `posts` LEFT JOIN `users` ON `posts`.`author` = `users`.`id` LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `deleted` = 0 ORDER BY `time` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
+$posts = $mysql->query("SELECT `posts`.`post_id`, `posts`.`author`, `posts`.`anon_author`, `posts`.`anon_ip`, `posts`.`content`, `posts`.`time`, `users`.`id`, `users`.`username`, `roles`.`level`, `roles`.`color` FROM `posts` LEFT JOIN `users` ON `posts`.`author` = `users`.`id` LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `sublocation` = ". $mysql->quote($_GET["th"]) ." AND `deleted` = 0 ORDER BY `time` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
 
 if ($posts->num_rows > 0) {
 	
@@ -69,7 +75,7 @@ if ($posts->num_rows > 0) {
 			}
 			$post["color"] = "grey";
 		} else {
-			$post["username"] = '<span style="color:'. $post["color"] .'">'. $post["username"] .'</span>';
+			$post["username"] = '<a href="index.php?p=profile&id='. $post["id"] .'" style="color:'. $post["color"] .'">'. $post["username"] .'</a>';
 		}
 		
 		$actions = null;
@@ -88,7 +94,12 @@ if ($posts->num_rows > 0) {
 			$jspost = true;
 		}
 		
-		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">'. $post["username"] .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. $post["content"] .'</div></div>';
+		if ($_GET["act"] == "add") {
+			$actions = null;
+			$jspost = false;
+		}
+		
+		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">'. $post["username"] .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. bb_to_html($post["content"]) .'</div></div>';
 		
 	}
 	

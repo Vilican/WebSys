@@ -7,7 +7,7 @@ function throw_error($error_message) {
 
 function menu() {
 	global $mysql;
-	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1';");
+	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1' ORDER BY `ord` ASC;");
 	if ($pages->num_rows > 0) {
 		while($menu_page = $pages->fetch_assoc()) {
 			if ($_GET["p"] == $menu_page["id"]) {
@@ -51,11 +51,6 @@ function admin_menu() {
 			$menu .= "<li><a href='admin.php?p=content' class='act'>Správa obsahu</a></li>";
 		} else {
 			$menu .= "<li><a href='admin.php?p=content'>Správa obsahu</a></li>";
-		}
-		if ($_GET["p"] == "files") {
-			$menu .= "<li><a href='admin.php?p=files' class='act'>Správa souborů</a></li>";
-		} else {
-			$menu .= "<li><a href='admin.php?p=files'>Správa souborů</a></li>";
 		}
 	}
 	
@@ -235,4 +230,43 @@ function id_to_user($identificator) {
 	
 	return false;
 	
+}
+
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        case 'g':
+        $val *= 1024;
+        case 'm':
+        $val *= 1024;
+        case 'k':
+        $val *= 1024;
+    }
+    return $val;
+}
+
+function max_file_upload() {
+    $max_upload = return_bytes(ini_get('upload_max_filesize'));
+    $max_post = return_bytes(ini_get('post_max_size'));
+    $memory_limit = return_bytes(ini_get('memory_limit'));
+    return min($max_upload, $max_post, $memory_limit);
+}
+
+function bb_to_html($text) {
+	$find = array(
+		'~\[b\](.*?)\[/b\]~s',
+		'~\[i\](.*?)\[/i\]~s',
+		'~\[u\](.*?)\[/u\]~s',
+		'~\[url\]((?:ftp|https?)://.*?)\[/url\]~s',
+		'~\[img\](https?://.*?\.(?:jpg|jpeg|gif|png|bmp))\[/img\]~s'
+	);
+	$replace = array(
+		'<b>$1</b>',
+		'<i>$1</i>',
+		'<span class="underline">$1</span>',
+		'<a href="$1" rel="nofollow">$1</a>',
+		'<img src="$1" class="user-image img-responsive" alt="">'
+	);
+	return preg_replace($find,$replace,$text);
 }

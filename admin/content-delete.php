@@ -14,7 +14,7 @@ do {
 		break;
 	}
 	
-	$pg = $mysql->query("SELECT `pages`.`id`, `pages`.`title` FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
+	$pg = $mysql->query("SELECT `pages`.`id`, `pages`.`title`, `pages`.`type` FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
 	
 	if ($pg->num_rows == 0) {
 		$page["content"] = '<div class="alert alert-danger"><strong>Smazání: taková stránka neexistuje!</strong></div>';
@@ -26,6 +26,10 @@ do {
 	if (!has_access("admin_content_delete_all") and !(has_access("admin_content_delete") and $pg["author"] == $_SESSION["id"])) {
 		$page["content"] = '<div class="alert alert-danger"><strong>Smazání: chybí oprávnění!</strong></div>';
 		break;
+	}
+	
+	if ($pg["type"] == 4) {
+		$msg = '<br><p class="text-info">Poznámka: Smazáním galerie nesmažete složku s obrázky.</p>';
 	}
 
 	if (isset($_POST["submit"])) do {
@@ -49,6 +53,6 @@ do {
 	$page["content"] .= '<form method="post"><table style="border-spacing: 10px">
 <tr><td>Stránka:</td><td><input type="text" class="form-control" value="'. $pg["title"] .'" disabled="disabled"></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Smazat" class="btn btn-danger"></td></tr>
-</table></form>';
+</table>'. $msg .'</form>';
 
 } while(0);

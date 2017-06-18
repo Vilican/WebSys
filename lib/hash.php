@@ -1,9 +1,15 @@
 <?php
 
+/*
+ * HASH SECURITY SETTINGS
+ * DO NOT CHANGE ANYTHING HERE IF YOU DON'T KNOW WHAT IT MEANS OR WHAT CONSEQUENCES IT WILL HAVE
+ * YOU COULD SEVERELY WEAKEN SECURITY OF WEB APPLICATION HERE
+*/
+
 define("PBKDF2_HASH_ALGORITHM", "sha512");
-define("PBKDF2_ITERATIONS", 16385);
-define("PBKDF2_SALT_BYTE_SIZE", 20);
-define("PBKDF2_HASH_BYTE_SIZE", 28);
+define("PBKDF2_ITERATIONS", 20001);
+define("PBKDF2_SALT_BYTE_SIZE", 24);
+define("PBKDF2_HASH_BYTE_SIZE", 0);
 define("HASH_SECTIONS", 4);
 define("HASH_ALGORITHM_INDEX", 0);
 define("HASH_ITERATION_INDEX", 1);
@@ -11,7 +17,7 @@ define("HASH_SALT_INDEX", 2);
 define("HASH_PBKDF2_INDEX", 3);
 
 function create_hash($password) {
-    $salt = base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
+    $salt = base64_encode(openssl_random_pseudo_bytes(PBKDF2_SALT_BYTE_SIZE));
     return PBKDF2_HASH_ALGORITHM . ":" . PBKDF2_ITERATIONS . ":" .  $salt . ":" .
         base64_encode(pbkdf2(
             PBKDF2_HASH_ALGORITHM,
@@ -56,7 +62,7 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
     $algorithm = strtolower($algorithm);
     if(!in_array($algorithm, hash_algos(), true))
         trigger_error('PBKDF2 ERROR: Invalid hash algorithm.', E_USER_ERROR);
-    if($count <= 0 || $key_length <= 0)
+    if($count <= 0 || $key_length < 0)
         trigger_error('PBKDF2 ERROR: Invalid parameters.', E_USER_ERROR);
 
     if (function_exists("hash_pbkdf2")) {

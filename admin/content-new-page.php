@@ -16,6 +16,14 @@ do {
 	
 	require "admin/require/page-extras.php";
 	
+	if ($sys["license"] < 1) {
+		$lic = '<span class="text-danger">Licence nedovoluje vkládání komerčního obsahu.</span>';
+	}
+	
+	if ($_GET["type"] == 4) {
+		$bodytext = '<br><p><b>Jak nahrávat obrázky do galerie:</b><br>Ve složce "uploads" vytvořte složku se stejným jménem jako ID stránky a naplňte ji obrázky.<br>Obrázky v galerii budou automaticky řazeny vzestupně podle jména souboru.</p>';
+	}
+	
 	if (isset($_POST["submit"])) do {
 		
 		if (!validate_csrf($_POST["csrf"])) {
@@ -71,7 +79,14 @@ do {
 
 		$mysql->query("INSERT INTO `pages` (`id`, `title`, `content`, `description`, `type`, `ord`, `author`, `visible`, `access`". $insert_fields[0] .") VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote(santise($_POST["title"])) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote(santise($_POST["description"])) .", ". $mysql->quote($_GET["type"]) .", ". $mysql->quote($_POST["ord"]) .", ". $mysql->quote($_SESSION["id"]) .", ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", ". $mysql->quote($_POST["access"]) . $insert_fields[1] .");");
 		$mysql->query("INSERT INTO `phistory` (`page`, `content`, `author`) VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote($_SESSION["id"]) .");");
-		header("Location: admin.php?p=content-edit-page&id=". $_POST["id"]);
+		
+		if ($_GET["type"] == 4) {
+			if (!mkdir("upload/" . santise($_POST["id"]), 0755)) {
+				header("Location: admin.php?p=content-edit-page&id=". $_POST["id"] .'&cerr&cok');
+			}
+		}
+		
+		header("Location: admin.php?p=content-edit-page&id=". $_POST["id"] .'&cok');
 		die();
 		
 	} while(0);
@@ -82,7 +97,7 @@ do {
 <tr><td>ID:</td><td><input type="text" name="id" class="form-control" value="'. santise($_POST["id"]) .'"></td></tr>
 <tr><td>Titulek:</td><td><input type="text" name="title" class="form-control" value="'. santise($_POST["title"]) .'"></td></tr>
 <tr><td>Popis:</td><td><textarea name="description" class="form-control">'. santise($_POST["description"]) .'</textarea></td></tr>
-<tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. $_POST["content"] .'</textarea></td></tr>
+<tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. $_POST["content"] .'</textarea>'. $lic . $bodytext .'</td></tr>
 <tr><td>Pořadí:</td><td><input type="text" name="ord" class="form-control" value="'. santise($_POST["ord"]) .'"></td></tr>
 <tr><td>Přístup čtení:</td><td><input type="text" name="access" class="form-control" value="'. santise($_POST["access"]) .'"></td></tr>
 '. show_page_fields_new($_GET["type"]) .'

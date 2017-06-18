@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, follow">
+<?php if (!$unbranded) { echo '<meta name="generator" content="WebSys">
+'; }?>
 <title>Administrace | <?php echo $sys["title"]; ?></title>
 <!--[if lt IE 9]>
     <script src="template/js/html5shiv.js"></script>
@@ -12,7 +14,7 @@
 <link href="template/css/theme.css" rel="stylesheet">
 </head>
 <body>
-<div class="navbar navbar-fixed-top" role="navigation">
+<div class="navbar" role="navigation">
 <div class="header">
 <h1 class="container"><?php echo $sys["title"]; ?> - administrace</h1>
 </div>
@@ -51,7 +53,7 @@
 <script src="template/js/bootstrap.js"></script>
 <script src="template/js/offcanvas.js"></script>
 <script src="template/js/nicescroll.js"></script>
-<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 100}); });</script>
+<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($ckeditor) { echo '<script src="lib/ckeditor/ckeditor.js"></script>
 <script>CKEDITOR.replace("content");</script>'; } ?>
 

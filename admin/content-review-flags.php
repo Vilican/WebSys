@@ -8,7 +8,13 @@ do {
 	}
 	
 	$page["title"] = 'Správa obsahu - nahlášené příspěvky';
-	$page["content"] .= "<p>Tyto příspěvky byly nahlášeny. Zde můžete nahlášení zamítnout nebo příspěvky zlikvidovat.</p>";
+	$page["content"] .= "<p>Tyto příspěvky byly nahlášeny. Zde můžete příspěvky jednoduše revidovat.</p>";
+	
+	if (!empty($_GET["sid"])) {
+		
+		$mysql->query("DELETE FROM `flags` WHERE `post` = ". $mysql->quote($_GET["sid"]) .";");
+		
+	}
 	
 	if (!isset($_GET["page"]) or !is_numeric($_GET["page"])) {
 		$_GET["page"] = 1;
@@ -21,16 +27,15 @@ do {
 		break;
 	}
 	
-	// TODO: better pagination
 	if ($post_count > $sys["paging"]) {
 		$page_count = ceil($post_count / $sys["paging"]);
-		$paging = '<p>Stránky: ';
+		$paging = '<ul class="pagination">';
 		for ($i = 1; $i <= $page_count; $i++) {
 			if ($_GET["page"] == $i) {
-				$paging .= '<a href="admin.php?p=content-review-flags&page='. $i .'" class="btn btn-warning btn-sm">'. $i .'</a> ';
+				$paging .= '<li class="active"><a href="admin.php?p=content-review-flags&page='. $i .'">'. $i .'</a></li>';
 				continue;
 			}
-			$paging .= '<a href="admin.php?p=content-review-flags&page='. $i .'" class="btn btn-primary btn-sm">'. $i .'</a> ';
+			$paging .= '<li><a href="admin.php?p=content-review-flags&page='. $i .'">'. $i .'</a></li>';
 		}
 		$paging .= '</p>';
 	}
@@ -48,6 +53,8 @@ do {
 	
 	while ($post = $posts->fetch_assoc()) {
 		
+		$addr = 'index.php?p='. $post["location"];
+		
 		if (empty($post["username"])) {
 			if (has_access("posts_showip")) {
 				$post["username"] = '<i data-toggle="tooltip" title="IP: '. $post["anon_ip"] .'">'. $post["anon_author"] .'</i>';
@@ -56,11 +63,12 @@ do {
 			}
 			$post["color"] = "grey";
 		} else {
-			$post["username"] = '<span style="color:'. $post["color"] .'">'. $post["username"] .'</span>';
+			$post["username"] = '<a target="_blank" href="index.php?p=profile&id='. $post["id"] .'" style="color:'. $post["color"] .'">'. $post["username"] .'</a>';
 		}
 		
 		if (!empty($post["name"])) {
-			$post["name"] = " | vlákno/místnost". $post["name"];
+			$thread = " | vlákno: ". $post["name"];
+			$addr .= "&th=" . $post["sublocation"];
 		}
 		
 		$flaggers = $mysql->query("SELECT `users`.`username` FROM `flags` INNER JOIN `users` ON `flags`.`user` = `users`.`id`;");
@@ -70,19 +78,11 @@ do {
 			$flaggers_list .= $flagger["username"] .", ";
 		}
 		
-		$footer = 'Uživatelé, kteří nahlásili příspěvek: '. substr($flaggers_list, 0, -2) .'<br><button class="btn btn-primary btn-xs">Zobrazit příspěvek</button> <button class="btn btn-warning btn-xs">Upravit příspěvek</button> <button class="btn btn-danger btn-xs">Odstranit příspěvek</button> <button class="btn btn-danger btn-xs">Zamítnout nahlášení</button>';
-		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">autor '. $post["username"] .' | stránka '. $post["title"] . $thread .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. $post["content"] .'</div><div class="panel-footer panel-footer-warn">'. $footer .'</div></div>';
+		$footer = 'Uživatelé, kteří nahlásili příspěvek: '. substr($flaggers_list, 0, -2) .'<br><a target="_blank" href="'. $addr .'" class="btn btn-primary btn-xs">Přejít do diskuze</a> <a href="admin.php?p=content-review-flags&sid='. $post["post_id"] .'" class="btn btn-warning btn-xs">Označit jako vyřízené</a>';
+		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">autor '. $post["username"] .' | stránka '. $post["title"] . $thread .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. bb_to_html($post["content"]) .'</div><div class="panel-footer panel-footer-warn">'. $footer .'</div></div>';
 		
 	}
 	
 	$page["content"] .= $paging;
 	
 } while(0);
-
-// REJECT
-#$mysql->query("UPDATE `users` SET `flags_incorrect` = `flags_incorrect` + 1 WHERE `id` IN (". implode(',', array_map('intval', $users)) .");");
-#$mysql->query("DELETE FROM `flags` WHERE `post` = ". $mysql->quote($_GET["pid"]) .";");
-
-// ACCEPT
-#$mysql->query("UPDATE `users` SET `flags_correct` = `flags_correct` + 1 WHERE `id` IN (". implode(',', array_map('intval', $users)) .");");
-#$mysql->query("DELETE FROM `flags` WHERE `post` = ". $mysql->quote($_GET["pid"]) .";");

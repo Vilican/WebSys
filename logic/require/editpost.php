@@ -19,6 +19,12 @@ if (!validate_csrf($_POST["csrf"])) {
 	exit;
 }
 
+if (empty($_POST["content"])) {
+	echo '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">Úprava</h4></div><div class="modal-body">
+<p>Příspěvek nemůže být prázdný</p></div><div class="modal-footer"><button type="button" id="stopreload" class="btn btn-primary">OK</button></div></div></div>';
+	exit;
+}
+
 if (!empty($_POST["author"])) {
 	
 	$mysql->query("UPDATE `posts` SET `anon_author` = ". $mysql->quote(santise($_POST["author"])) .", `content` = ". $mysql->quote(santise($_POST["content"])) ." WHERE `post_id` = ". $mysql->quote($_POST["post"]) .";");

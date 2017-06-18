@@ -34,6 +34,10 @@ if (in_array($_GET["p"], $sys_pages)) {
 			session_destroy();
 			header("Location: index.php");
 			exit;
+		case "lostpass":
+			require "logic/lostpass.php";
+			require "template/lostpass.php";
+			break;
 	}
 	
 } else {
@@ -47,7 +51,7 @@ if (in_array($_GET["p"], $sys_pages)) {
 		
 	} elseif ($page["access"] == 0 or $page["access"] <= $_SESSION["level"]) {
 		
-		$page_type_map = array(2 => "logic/talk.php", 3 => "logic/forum.php");
+		$page_type_map = array(2 => "logic/talk.php", 3 => "logic/forum.php", 4 => "logic/galery.php");
 		
 		if (!empty($page_type_map[$page["type"]])) {
 			require $page_type_map[$page["type"]];

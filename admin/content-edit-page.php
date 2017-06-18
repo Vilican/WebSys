@@ -28,6 +28,27 @@ do {
 		break;
 	}
 	
+	if ($sys["license"] < 1) {
+		$lic = '<br><span class="text-danger">Licence nedovoluje vkládání komerčního obsahu.</span>';
+	}
+	
+	if ($pg["type"] == 4) {
+		$bodytext = '<br><p><b>Jak nahrávat obrázky do galerie:</b><br>Ve složce "uploads" vytvořte složku se stejným jménem jako ID stránky a naplňte ji obrázky.<br>Obrázky v galerii budou automaticky řazeny vzestupně podle jména souboru.</p>';
+		$idwarn = '<span class="text-info">Pozor - při změně identifikátoru stránky je nutné přejmenovat složku s obrázky!</span>';
+	
+		if (!file_exists('upload/'. $pg["id"])) {
+			$bodytext .= '<span class="text-danger"><p><strong>Galerie nebude fungovat, protože tato složka nebyla dosud vytvořena!</strong></p></span>';
+		}
+	}
+	
+	if (isset($_GET["cerr"])) {
+		$message .= '<div class="alert alert-danger"><strong>Nepodařilo se vytvořit složku pro galerii. Před používáním galerie musíte tuto složku vytvořit.</strong></div>';
+	}
+	
+	if (isset($_GET["cok"])) {
+		$message .= '<div class="alert alert-success"><strong>Stránka byla vytvořena</strong></div>';
+	}
+	
 	require "admin/require/page-extras.php";
 	
 	if (isset($_POST["submit"])) do {
@@ -96,10 +117,10 @@ do {
 	$ckeditor = true;
 	$page["content"] .= $message .'
 <form method="post"><table style="border-spacing: 10px">
-<tr><td>ID:</td><td><input type="text" name="id" class="form-control" value="'. restore_value($pg["id"], santise($_POST["id"])) .'"></td></tr>
+<tr><td>ID:</td><td><input type="text" name="id" class="form-control" value="'. restore_value($pg["id"], santise($_POST["id"])) .'">'. $idwarn .'</td></tr>
 <tr><td>Titulek:</td><td><input type="text" name="title" class="form-control" value="'. restore_value($pg["title"], santise($_POST["title"])) .'"></td></tr>
 <tr><td>Popis:</td><td><textarea name="description" class="form-control">'. restore_value($pg["description"], santise($_POST["description"])) .'</textarea></td></tr>
-<tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. restore_value($pg["content"], $_POST["content"]) .'</textarea></td></tr>
+<tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. restore_value($pg["content"], $_POST["content"]) .'</textarea>'. $lic . $bodytext .'</td></tr>
 <tr><td>Pořadí:</td><td><input type="text" name="ord" class="form-control" value="'. restore_value($pg["ord"], santise($_POST["ord"])) .'"></td></tr>
 <tr><td>Přístup čtení:</td><td><input type="text" name="access" class="form-control" value="'. restore_value($pg["access"], santise($_POST["access"])) .'"></td></tr>
 '. show_page_fields_edit($pg["type"], $pg) .'

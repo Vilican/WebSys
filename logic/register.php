@@ -18,17 +18,13 @@ if ($userfields->num_rows > 0) {
 	}
 }
 
-if ($sys["regcaptcha"] == "1") {
-	
-	$reg_fields .= '<tr><td>Captcha</td><td><img id="captcha" src="lib/captcha.php?t=kofl" width="120" height="30" border="1">
+$reg_fields .= '<tr><td>Captcha</td><td><img id="captcha" src="lib/captcha.php?t=kofl" width="120" height="30" border="1">
 <a href="#" onclick="document.getElementById(\'captcha\').src = \'lib/captcha.php?t=kofl&amp;tk=\' + Math.random(); document.getElementById(\'captcha_code\').value = \'\'; return false;">Změnit kód</a>
 <input type="text" name="captcha" class="form-control"></td></tr>';
-	
-}
 
 if (isset($_POST["submit"])) {
 	
-	if (strtolower($_SESSION['captcha']) != strtolower($_POST["captcha"]) and $sys["regcaptcha"]) {
+	if (strtolower($_SESSION['captcha']) != strtolower($_POST["captcha"])) {
 		$message .= "Captcha kód nesouhlasí!<br>";
 		$err = true;
 	}

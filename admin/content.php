@@ -39,6 +39,15 @@ do {
 		$boxedit = true;
 	}
 
+	if (has_access("admin_content_upload")) {
+		if (isset($_GET["files"])) {
+			$li_files = ' class="active"';
+			$div_files = ' in active';
+		}
+		$page["content"] .= '<li'. $li_files .'><a data-toggle="tab" href="#upload">Nahrát</a></li>';
+		$upload = true;
+	}
+	
 	if (has_access("admin_content_review")) {
 		$page["content"] .= '<li><a data-toggle="tab" href="#review">Revize</a></li>';
 		$rev = true;
@@ -56,6 +65,10 @@ do {
 	
 	if ($boxedit) {
 		require "admin/require/content-box.php";
+	}
+	
+	if ($upload) {
+		require "admin/require/content-upload.php";
 	}
 	
 	if ($rev) {

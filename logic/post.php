@@ -4,7 +4,7 @@ if (!is_numeric($_POST["post"])) {
 	exit;
 }
 
-$post = $mysql->query("SELECT `posts`.`post_id`, `posts`.`anon_author`, `posts`.`author`, `posts`.`time`, `posts`.`content`, `roles`.`level` FROM `posts` LEFT JOIN `users` ON `posts`.`author` = `users`.`id` LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `deleted` = 0 AND `post_id` = ". $mysql->quote($_POST["post"]) .";");
+$post = $mysql->query("SELECT `posts`.`post_id`, `posts`.`anon_author`, `posts`.`sublocation`, `posts`.`author`, `posts`.`time`, `posts`.`content`, `roles`.`level` FROM `posts` LEFT JOIN `users` ON `posts`.`author` = `users`.`id` LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `location` = ". $mysql->quote($_GET["p"]) ." AND `deleted` = 0 AND `post_id` = ". $mysql->quote($_POST["post"]) .";");
 
 if ($post->num_rows == 0) {
 	exit;

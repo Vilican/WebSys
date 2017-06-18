@@ -38,10 +38,10 @@ do {
 		$paging = '<ul class="pagination">';
 		for ($i = 1; $i <= $page_count; $i++) {
 			if ($_GET["page"] == $i) {
-				$paging .= '<li class="active"><a href="admin.php?p=content-review-flags&page='. $i .'">'. $i .'</a></li>';
+				$paging .= '<li class="active"><a href="admin.php?p=content-review-deleted&page='. $i .'">'. $i .'</a></li>';
 				continue;
 			}
-			$paging .= '<li><a href="admin.php?p=content-review-flags&page='. $i .'">'. $i .'</a></li>';
+			$paging .= '<li><a href="admin.php?p=content-review-deleted&page='. $i .'">'. $i .'</a></li>';
 		}
 		$paging .= '</p>';
 	}
@@ -51,7 +51,7 @@ do {
 	LEFT JOIN `topics` ON `posts`.`sublocation` = `topics`.`id`
 	LEFT JOIN `users` ON `posts`.`author` = `users`.`id`
 	LEFT JOIN `roles` ON `users`.`role` = `roles`.`role_id`
-	WHERE `deleted` = 1
+	WHERE `posts`.`deleted` = 1
 	ORDER BY `time` DESC
 	LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
 	
@@ -79,7 +79,7 @@ do {
 		$delby = $delby->fetch_assoc();
 		
 		$footer = 'Tento příspěvek smazal: '. $delby["username"] .'<br><a href="admin.php?p=content-review-deleted&act=undo&id='. $post["post_id"] .'&csrf='. $csrf_token .'" class="btn btn-warning btn-xs">Obnovit příspěvek</a> <a href="admin.php?p=content-review-deleted&act=del&id='. $post["post_id"] .'&csrf='. $csrf_token .'"class="btn btn-danger btn-xs">Odstranit příspěvek</a>';
-		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">autor '. $post["username"] .' | stránka '. $post["title"] . $thread .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. $post["content"] .'</div><div class="panel-footer panel-footer-warn">'. $footer .'</div></div>';
+		$page["content"] .= '<div class="panel panel-default"><div class="panel-heading">autor '. $post["username"] .' | stránka '. $post["title"] . $thread .'<small class="rfloat">'. date("j.n.Y G:i", strtotime($post["time"])) .' <span id="acts">'. $actions .'</span></small></div><div class="panel-body">'. bb_to_html($post["content"]) .'</div><div class="panel-footer panel-footer-warn">'. $footer .'</div></div>';
 		
 	}
 	

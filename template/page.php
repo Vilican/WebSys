@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="<?php echo $page["description"]; ?>">
 <meta name="author" content="<?php echo $sys["author"]; ?>">
+<?php if (!$unbranded) { echo '<meta name="generator" content="WebSys">
+'; }?>
 <title><?php echo $page["title"]; ?> | <?php echo $sys["title"]; ?></title>
 <!--[if lt IE 9]>
     <script src="template/js/html5shiv.js"></script>
@@ -13,8 +15,9 @@
 <link href="template/css/theme.css" rel="stylesheet">
 </head>
 <body>
-<div class="navbar navbar-fixed-top" role="navigation">
+<div class="navbar" role="navigation">
 <div class="header">
+<noscript><div class="alert alert-danger txt-center"><strong>Nemáte zapnutý JavaScript. Aby stránky správně fungovaly, musíte si ho zapnout. <a href="http://www.enable-javascript.com/cz/" target="_blank">Návod k zapnutí >></a></strong></div></noscript>
 <h1 class="container"><?php echo $sys["title"]; ?></h1>
 </div>
 <div class="container navb">
@@ -57,8 +60,13 @@ Vytvořil <?php echo $sys["author"]; ?><?php if (!$unbranded) { echo ' pomocí <
 <script src="template/js/bootstrap.js"></script>
 <script src="template/js/offcanvas.js"></script>
 <script src="template/js/nicescroll.js"></script>
-<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 100}); });</script>
+<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
 <?php if ($jsthread) { echo '<script src="template/js/thread.js"></script>'; } ?>
+<?php if ($galery) { echo '<link rel="stylesheet" href="lib/fancybox/jquery.fancybox.css" type="text/css" media="screen">
+<script type="text/javascript" src="lib/laziestloader.js"></script>
+<script type="text/javascript" src="lib/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">$(document).ready(function() { $(".fancybox").fancybox(); });</script>
+<script type="text/javascript">$(".gal-mini").laziestloader({threshold:200});</script>'; } ?>
 </body>
 </html>

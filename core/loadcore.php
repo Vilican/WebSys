@@ -14,8 +14,7 @@ while($setting = $settings->fetch_assoc()) {
 	$sys[$setting["setting"]] = $setting["value"];
 }
 
-$flag_reasons = array(1 => "Tento příspěvek je nevhodný", 2 => "Tento příspěvek je mimo téma", 3 => "Tento příspěvek je zastaralý");
-$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum');
+$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum', 4 => 'galerie');
 
 if (isset($_SESSION["id"])) {
 	$mysql->update_activity($_SESSION["id"]);
