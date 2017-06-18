@@ -27,7 +27,7 @@ do {
 		break;
 	}
 	
-	if ($page["param1"] != 0 and !(isset($_SESSION["id"]) and $_SESSION["level"] >= $page["param1"])) {
+	if ($page["param1"] != 0 and !(isset($_SESSION["id"]) and $_SESSION["level"] >= $page["param1"]) or !has_access("addpost")) {
 		break;
 	}
 	

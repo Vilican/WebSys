@@ -1,9 +1,5 @@
 <?php
 
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-session_start();
-
 require "core/loadcore.php";
 
 if (!has_access("admin")) {

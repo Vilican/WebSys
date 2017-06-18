@@ -1,6 +1,6 @@
 <?php
 
-if (($_POST["act"] == "addprep" or $_POST["act"] == "addthread") and (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"]))) {
+if (($_POST["act"] == "addprep" or $_POST["act"] == "addthread") and (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"])) and has_access("thread_create")) {
 
 	if ($_POST["act"] == "addthread") {
 		

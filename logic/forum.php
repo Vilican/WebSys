@@ -43,7 +43,7 @@ do {
 	
 	if ($topics->num_rows > 0) {
 		
-		if (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"])) {
+		if (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"]) and has_access("thread_delete")) {
 			$page["content"] .= '<p><button type="button" class="btn btn-default btn-sm thread-add">Přidat téma</button></p>';
 			$jsthread = true;
 		}

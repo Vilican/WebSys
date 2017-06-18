@@ -75,7 +75,7 @@ if (isset($_POST["submit"])) {
 				$message .= $field["label"] ." - neplatný tvar!<br>";
 				$err = true;
 			}
-			$reg_values .= "`". $field["name"] ."` = ". santise($mysql->quote($_POST[$field["name"]])) .", ";
+			$reg_values .= "`". $field["name"] ."` = ". $mysql->quote(santise($_POST[$field["name"]])) .", ";
 		}
 	}
 	
@@ -85,7 +85,7 @@ if (isset($_POST["submit"])) {
 	}
 	
 	if ($mysql->query("SELECT `id` FROM `users` WHERE `username` = ". $mysql->quote($_POST["username"]) .";")->num_rows > 0) {
-		$message .= "Jméno je již registrován!<br>";
+		$message .= "Jméno je již registrováno!<br>";
 		$err = true;
 	}
 	

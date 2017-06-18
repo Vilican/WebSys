@@ -1,16 +1,12 @@
 <?php
 
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-session_start();
-
 require "core/loadcore.php";
 
 if ($_GET["p"] == null) {
 	$_GET["p"] = $sys["homepage"];
 }
 
-$sys_pages = array("login", "logout", "reg", "lostpass");
+$sys_pages = array("login", "logout", "reg", "lostpass", "settings");
 
 if (in_array($_GET["p"], $sys_pages)) {
 	
@@ -35,8 +31,18 @@ if (in_array($_GET["p"], $sys_pages)) {
 			header("Location: index.php");
 			exit;
 		case "lostpass":
-			require "logic/lostpass.php";
-			require "template/lostpass.php";
+			if ($sys["lostpass"]) {
+				require "logic/lostpass.php";
+				require "template/lostpass.php";
+				break;
+			}
+			$page["title"] = "Zamítnuto";
+			$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění pro zobrazení stránky!</strong></div>';
+			require "template/page.php";
+			break;
+		case "settings":
+			require "logic/settings.php";
+			require "template/settings.php";
 			break;
 	}
 	

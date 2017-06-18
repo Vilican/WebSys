@@ -46,3 +46,13 @@ class DB {
 	}
 	
 }
+
+function throw_error($error_message) {
+	require "template/core_error.php";
+	exit;
+}
+
+$mysql = new DB();
+if (!$mysql->connect(_SRV, _USR, _PW, _DB)) {
+	throw_error("Připojení k databázi se nepodařilo.<br>Prosím zkontrolujte nastavení v config.php");
+}

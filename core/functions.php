@@ -1,10 +1,5 @@
 <?php
 
-function throw_error($error_message) {
-	require "template/core_error.php";
-	exit;
-}
-
 function menu() {
 	global $mysql;
 	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1' ORDER BY `ord` ASC;");
@@ -38,7 +33,10 @@ function has_access($place) {
 	if (!isset($_SESSION["id"])) {
 		return false;
 	}
-	if ($_SESSION["access_". $place] > 0 or $_SESSION["id"] == 0) {
+	if ($_SESSION["id"] == 0) {
+		return true;
+	}
+	if ($_SESSION["access_". $place] > 0 and $_SESSION["emailvalid"] == 1) {
 		return true;
 	}
 	return false;
@@ -203,7 +201,7 @@ function check_type($str, $type) {
 			break;
 			
 		case "username":
-			if(!ctype_alnum(str_replace(array("-", "_"), '', $str))) {
+			if(!ctype_alnum(str_replace(array("-", "_", "á", "č", "ď", "é", "ě", "í", "ň", "ó", "ř", "š", "ť", "ů", "ú", "ý", "ž"), '', $str))) {
 				return false;
 			}
 		

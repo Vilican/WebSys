@@ -2,7 +2,7 @@
 
 if (isset($_POST["ap"])) do {
 	
-	if (!(($page["param1"] == 0 and $sys["anonymousposts"] == 1) or ($page["param1"] <= $_SESSION["level"] and $_SESSION["access_addpost"] > 0))) {
+	if (!(($page["param1"] == 0 and $sys["anonymousposts"] == 1) or ($page["param1"] <= $_SESSION["level"] and $_SESSION["access_addpost"] > 0) or !has_access("addpost"))) {
 		break;
 	}
 	
@@ -57,7 +57,7 @@ if (isset($_POST["ap"])) do {
 	
 } while(0);
 
-if (($page["param1"] == 0 and $sys["anonymousposts"] == 1) or ($page["param1"] <= $_SESSION["level"] and $_SESSION["access_addpost"] > 0)) {
+if (($page["param1"] == 0 and $sys["anonymousposts"] == 1) or ($page["param1"] <= $_SESSION["level"] and $_SESSION["access_addpost"] > 0) and has_access("addpost")) {
 	
 	if (!isset($_SESSION["id"])) {
 	
