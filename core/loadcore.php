@@ -4,14 +4,37 @@ require "config.php";
 require "database.php";
 
 $settings = $mysql->query("SELECT * FROM `settings`");
-while($setting = $settings->fetch_assoc()) {
+while ($setting = $settings->fetch_assoc()) {
 	$sys[$setting["setting"]] = $setting["value"];
+}
+
+if (empty($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] !== "on") {
+	header("Location: https://". $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	exit;
 }
 
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
 if ($sys["stricthttps"]) { ini_set('session.cookie_secure', 1); }
 session_start();
+
+if ($sys["restrictorigin"] == 1) {
+	header("Referrer-Policy: no-referrer");
+}
+
+switch ($sys["frameheader"]) {
+	case 1:
+		header("X-Frame-Options: SAMEORIGIN");
+		break;
+	case 2:
+		header("X-Frame-Options: DENY");
+		break;
+	default:
+		break;
+}
+
+header("X-XSS-Protection: 1; mode=block");
+header("X-Content-Type-Options: nosniff");
 
 require "functions.php";
 
