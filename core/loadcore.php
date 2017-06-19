@@ -42,13 +42,15 @@ $page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum', 4 => 'galeri
 
 if (isset($_SESSION["id"])) {
 	$mysql->update_activity($_SESSION["id"]);
-	$user = $mysql->query("SELECT * FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `id`= ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
+	$userparams = $mysql->query("SELECT * FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `id`= ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
 	unset($user["hash"]);
 	unset($user["lastact"]);
 	unset($user["blocked"]);
 	unset($user["deleted"]);
-	session_regenerate_id(true);				
-	$_SESSION = $user;
+	session_regenerate_id();
+	foreach ($userparams as $userparamname => $userparamvalue) {
+		$_SESSION[$userparamname] = $userparamvalue;
+	}
 }
 
 if ($sys["license"] == 2 and $sys["whitelabel"] == 1) {
