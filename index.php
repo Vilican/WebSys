@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require "core/loadcore.php";
 

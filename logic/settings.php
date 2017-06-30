@@ -6,15 +6,43 @@ if (!isset($_SESSION["id"])) {
 	die();
 }
 
-if (isset($_GET["emailval"]) and isset($_POST["request"])) {
+if (isset($_GET["newavatar"]) and isset($_POST["setavatar"])) {
+	
+}
+
+if (isset($_GET["newavatar"]) and isset($_GET["removeavatar"])) do {
+	
+ 	if (!validate_csrf($_GET["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
+  
+  $mysql->query("DELETE FROM `avatars` WHERE `user` = ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;");
+  $message = '<div class="alert alert-success"><strong>Avatar byl smazán</strong></div>';
+  
+} while(0);
+
+if (isset($_GET["emailval"]) and isset($_POST["request"])) do {
+	
+	if (strtolower($_SESSION['captcha']) != strtolower($_POST["captcha"])) {
+		$message = '<div class="alert alert-danger"><strong>Captcha kód nesouhlasí!</strong></div>';
+		break;
+	}
+	
+	if (!validate_csrf($_POST["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
 	
 	$usr = $mysql->query("SELECT `emailvalid` FROM `users` WHERE `id` = ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
+	
 	if ($usr["emailvalid"] == 1) {
-		die();
+		$message = '<div class="alert alert-danger"><strong>Váš email byl již validován!</strong></div>';
+		break;
 	}
 	
 	$_SESSION["valcode"] = bin2hex(openssl_random_pseudo_bytes(10));
-
+	
 	require 'lib/phpmailer/PHPMailerAutoload.php';
 	$mail = new PHPMailer;
 	$mail->isSMTP();
@@ -28,23 +56,34 @@ if (isset($_GET["emailval"]) and isset($_POST["request"])) {
 	if (_SMTPCERTINVALID) {
 		$mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
 	}
-	$mail->addAddress($_POST["email"]);
+	$mail->addAddress($_SESSION["email"]);
 	$mail->isHTML(true);
 	$mail->CharSet = 'UTF-8';
-	$mail->Subject = 'Reset hesla';
+	$mail->Subject = 'Validace emailu';
 	$mail->Body = '<!DOCTYPE html><html lang="cs"><head><meta charset="utf-8"></head><body>Dobrý den,<br>někdo (pravděpodobně Vy) požádal o ověření tohoto emailu na stránkách '. $sys["title"] .'.<br><br>Váš potvrzovací kód je: <b>'. $_SESSION["valcode"] .'</b><br><br>Tento kód nikomu neukazujte ani nepřeposílejte.<br>Pokud jste žádost nevytvořili, můžete email smazat.</body></html>';
 	$mail->send();
 	
-}
+	$message = '<div class="alert alert-success"><strong>Kód byl odeslán</strong></div>';
+	
+} while(0);
 
-if (isset($_GET["emailval"]) and isset($_POST["validate"])) {
+if (isset($_GET["emailval"]) and isset($_POST["validate"])) do {
+	
+	if (!validate_csrf($_POST["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
 	
 	if (!empty($_SESSION["valcode"]) and $_SESSION["valcode"] == $_POST["valcode"]) {
 		unset($_SESSION["valcode"]);
 		$message = '<div class="alert alert-success"><strong>Email byl ověřen!</strong></div>';
-		
+		$mysql->query("UPDATE `users` SET `emailvalid` = 1 WHERE `id` = ". $mysql->quote($_SESSION["id"]) .";");
+		break;
 	}
-}
+	
+	$message = '<div class="alert alert-danger"><strong>Kód je nesprávný nebo vyexpirovaný!</strong></div>';
+
+} while(0);
 
 if (isset($_GET["chpass"])) {
 	
@@ -184,7 +223,7 @@ if (isset($_GET["chpass"])) {
 	}
 
 	if ($usr["emailvalid"] == 0) {
-		$email_val = '<tr><td>Ověření emailu:</td><td><button type="button" class="btn btn-danger" id="emailval">Ověřit email</button></td></tr>';
+		$email_val = '<tr><td>Ověření emailu:</td><td><a href="index.php?p=settings&emailval" class="btn btn-danger" id="emailval">Ověřit email</a></td></tr>';
 	}
 	
 }

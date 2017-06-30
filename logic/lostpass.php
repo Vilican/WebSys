@@ -61,7 +61,7 @@ if (isset($_POST["submit2"])) {
 	
 	session_regenerate_id();
 	
-	if ($_SESSION["code"] == $_POST["code"]) {
+	if ($_SESSION["code"] == $_POST["code"] and !empty($_SESSION["code"]) and !empty($_POST["code"])) {
 		$_SESSION["authorized"] = true;
 	}
 	
