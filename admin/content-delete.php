@@ -14,7 +14,7 @@ do {
 		break;
 	}
 	
-	$pg = $mysql->query("SELECT `pages`.`id`, `pages`.`title`, `pages`.`type` FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
+	$pg = $mysql->query("SELECT `pages`.`id`, `pages`.`title`, `pages`.`type`, `pages`.`author` FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
 	
 	if ($pg->num_rows == 0) {
 		$page["content"] = '<div class="alert alert-danger"><strong>Smazání: taková stránka neexistuje!</strong></div>';
@@ -31,7 +31,11 @@ do {
 	if ($pg["type"] == 4) {
 		$msg = '<br><p class="text-info">Poznámka: Smazáním galerie nesmažete složku s obrázky.</p>';
 	}
-
+	
+	if ($pg["type"] == 5) {
+		$msg = '<br><p class="text-danger">POZOR: Smazáním kategorie se permanentně smažou i všechny články v ní!</p>';
+	}
+	
 	if (isset($_POST["submit"])) do {
 		
 		if (!validate_csrf($_POST["csrf"])) {

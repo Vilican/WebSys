@@ -31,7 +31,6 @@ do {
 		}
 		
 		$mysql->query("UPDATE `pages` SET `author` = ". $mysql->quote($_POST["author"]) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
-		$message = '<div class="alert alert-success"><strong>Stránka upravena</strong></div>';
 		$pg = $mysql->query("SELECT `pages`.`title`, `users`.`id`, `users`.`username` FROM `pages` INNER JOIN `users` ON `pages`.`author` = `users`.`id` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";")->fetch_assoc();
 		$page["content"] = '<div class="alert alert-success"><strong>Editor byl změněn</strong></div>';
 		

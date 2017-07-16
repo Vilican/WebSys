@@ -8,7 +8,7 @@ while ($setting = $settings->fetch_assoc()) {
 	$sys[$setting["setting"]] = $setting["value"];
 }
 
-if (empty($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] !== "on") {
+if ((empty($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] !== "on") && $sys["stricthttps"] == 1) {
 	header("Location: https://". $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 	exit;
 }
@@ -22,23 +22,12 @@ if ($sys["restrictorigin"] == 1) {
 	header("Referrer-Policy: no-referrer");
 }
 
-switch ($sys["frameheader"]) {
-	case 1:
-		header("X-Frame-Options: SAMEORIGIN");
-		break;
-	case 2:
-		header("X-Frame-Options: DENY");
-		break;
-	default:
-		break;
-}
-
 header("X-XSS-Protection: 1; mode=block");
 header("X-Content-Type-Options: nosniff");
 
 require "functions.php";
 
-$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum', 4 => 'galerie');
+$page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum', 4 => 'galerie', 5 => 'kategorie');
 
 if (isset($_SESSION["id"])) {
 	$mysql->update_activity($_SESSION["id"]);

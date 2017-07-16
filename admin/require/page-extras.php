@@ -13,7 +13,7 @@ function show_page_fields_edit($type, $pg) {
 		case 3:
 			return '<tr><td>Přístup psaní:</td><td><input type="text" name="access2" class="form-control" value="'. restore_value($pg["param1"], santise($_POST["access2"])) .'"></td></tr>
 <tr><td>Přístup vytváření:</td><td><input type="text" name="access3" class="form-control" value="'. restore_value($pg["param2"], santise($_POST["access3"])) .'"></td></tr>';
-	
+		
 	}
 	
 }
@@ -31,7 +31,7 @@ function show_page_fields_new($type) {
 		case 3:
 			return '<tr><td>Přístup psaní:</td><td><input type="text" name="access2" class="form-control" value="'. santise($_POST["access2"]) .'"></td></tr>
 <tr><td>Přístup vytváření:</td><td><input type="text" name="access3" class="form-control" value="'. santise($_POST["access3"]) .'"></td></tr>';
-	
+		
 	}
 	
 }

@@ -6,7 +6,7 @@ if ($_GET["p"] == null) {
 	$_GET["p"] = $sys["homepage"];
 }
 
-$sys_pages = array("login", "logout", "reg", "lostpass", "settings");
+$sys_pages = array("login", "logout", "reg", "lostpass", "settings", "profile");
 
 if (in_array($_GET["p"], $sys_pages)) {
 	
@@ -44,6 +44,10 @@ if (in_array($_GET["p"], $sys_pages)) {
 			require "logic/settings.php";
 			require "template/settings.php";
 			break;
+		case "profile":
+			require "logic/profile.php";
+			require "template/profile.php";
+			break;
 	}
 	
 } else {
@@ -57,7 +61,7 @@ if (in_array($_GET["p"], $sys_pages)) {
 		
 	} elseif ($page["access"] == 0 or $page["access"] <= $_SESSION["level"]) {
 		
-		$page_type_map = array(2 => "logic/talk.php", 3 => "logic/forum.php", 4 => "logic/galery.php");
+		$page_type_map = array(2 => "logic/talk.php", 3 => "logic/forum.php", 4 => "logic/galery.php", 5 => "logic/category.php");
 		
 		if (!empty($page_type_map[$page["type"]])) {
 			require $page_type_map[$page["type"]];

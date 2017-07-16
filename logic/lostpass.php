@@ -86,6 +86,7 @@ if (isset($_POST["submit3"]) and $_SESSION["authorized"]) do {
 	
 	require "lib/hash.php";
 	$mysql->query("UPDATE `users` SET `hash` = ". $mysql->quote(create_hash($_POST["pass"])) ." WHERE `loginname` = ". $mysql->quote($_SESSION["user"]) .";");
+	$mysql->query("UPDATE `users` SET `2fa_gauth` = NULL, `2fa_yubi` = NULL WHERE `loginname` = ". $mysql->quote($_SESSION["user"]) .";");
 	session_unset();
 	session_destroy();
 	header("Location: index.php?p=login");

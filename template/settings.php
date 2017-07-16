@@ -34,21 +34,33 @@ $page["content"] = $message .'
 $page["title"] = "Uživatelské nastavení - správa avatara";
 
 $page["content"] = $message .'
-<form action="index.php?p=settings&newavatar" method="post"><table style="border-spacing:10px">
-<tr><td>Avatar:</td><td><img src="upload/avatars/'. $path .'" class="avatar img-responsive" alt="Profilový obrázek"></td></tr>
-<tr><td>Nahrát:</td><td><input type="text" name="email" class="form-control"> <input type="submit" name="setavatar" value="Nahrát" class="btn btn-default"></td></tr>
-<tr><td>&nbsp;</td><td><a href="index.php?p=settings&newavatar&removeavatar&csrf='. $csrf .'" class="btn btn-danger">Smazat avatara</a></td></tr>
+<form action="index.php?p=settings&newavatar" method="post" enctype="multipart/form-data"><table style="border-spacing:10px">
+<tr><td>Avatar:</td><td><img src="'. displayAvatar($_SESSION["id"]) .'" class="avatar img-responsive" alt="Profilový obrázek"></td></tr>
+'. $avatar_actions .'
+<input type="hidden" name="csrf" value="'. $csrf .'"></table></form>';
+
+} elseif (isset($_GET["2fa"]) and ($sys["twofactor_yubi"] or $sys["twofactor_gauth"])) {
+
+$page["title"] = "Uživatelské nastavení - druhý faktor";
+
+$page["content"] = $message .'
+<form action="index.php?p=settings&2fa" method="post"><table style="border-spacing:10px">
+'. $gauth . $yubikey .'
 <input type="hidden" name="csrf" value="'. $csrf .'"></table></form>';
 
 } else {
 
+if ($sys["twofactor_yubi"] || $sys["twofactor_gauth"]) {
+	$button_2fa = ' <a class="btn btn-primary" href="index.php?p=settings&2fa">Druhý faktor</a>';
+}
+
 $page["title"] = "Uživatelské nastavení";
 
 $page["content"] = $message .'
+<p><a class="btn btn-primary" href="index.php?p=settings&newavatar">Změnit avatara</a> <a class="btn btn-primary" href="index.php?p=settings&chpass">Změnit heslo</a>'. $button_2fa .'</p>
 <form action="index.php?p=settings" method="post">
+<p><img src="'. displayAvatar($_SESSION["id"]) .'" class="avatar img-responsive" alt="Profilový obrázek"></p>
 <table style="border-spacing:10px">
-<tr><td>Avatar:</td><td><p><img src="upload/avatars/'. $path .'" class="avatar img-responsive" alt="Profilový obrázek"></p><p><a class="btn btn-primary" href="index.php?p=settings&newavatar">Změnit avatara</a></p></td></tr>
-<tr><td>Heslo:</td><td><a class="btn btn-primary" href="index.php?p=settings&chpass">Změnit heslo</a></td></tr>
 <tr><td>Přihlašovací jméno:</td><td><input type="text" name="loginname" value="'. restore_value(santise($usr["loginname"]), santise($_POST["loginname"])) .'" class="form-control"></td></tr>
 <tr><td>Uživatelské jméno:</td><td><input type="text" name="username" value="'. restore_value(santise($usr["username"]), santise($_POST["username"])) .'" class="form-control"></td></tr>
 <tr><td>Email:</td><td><input type="text" name="email" value="'. restore_value(santise($usr["email"]), santise($_POST["email"])) .'" class="form-control"></td></tr>

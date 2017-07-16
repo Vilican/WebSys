@@ -6,9 +6,27 @@ if (!isset($_SESSION["id"])) {
 	die();
 }
 
-if (isset($_GET["newavatar"]) and isset($_POST["setavatar"])) {
+if (isset($_GET["newavatar"]) and isset($_POST["setavatar"])) do {
 	
-}
+	if ($_FILES["avatarFile"]["size"] > 1048576) {
+		$message = '<div class="alert alert-danger"><strong>Maximální velikost obrázku je 1 MB!</strong></div>';
+		break;
+	}
+	
+	$extension = pathinfo($_FILES["avatarFile"]["name"], PATHINFO_EXTENSION);
+	if ($extension != "jpg" && $extension != "png" && $extension != "jpeg" && $extension != "gif") {
+		$message = '<div class="alert alert-danger"><strong>Jsou povoleny pouze obrázky JPG, PNG a GIF!</strong></div>';
+		break;
+	}
+	
+	if (!move_uploaded_file($_FILES["avatarFile"]["tmp_name"], "upload/avatars/". santise($_SESSION["id"]))) {
+		$message = '<div class="alert alert-danger"><strong>Obrázek nebylo možné nahrát!</strong></div>';
+		break;
+    }
+	
+	$message = '<div class="alert alert-success"><strong>Avatar byl uložen</strong></div>';
+	
+} while(0);
 
 if (isset($_GET["newavatar"]) and isset($_GET["removeavatar"])) do {
 	
@@ -17,8 +35,8 @@ if (isset($_GET["newavatar"]) and isset($_GET["removeavatar"])) do {
 		break;
 	}
   
-  $mysql->query("DELETE FROM `avatars` WHERE `user` = ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;");
-  $message = '<div class="alert alert-success"><strong>Avatar byl smazán</strong></div>';
+	unlink("upload/avatars/". santise($_SESSION["id"]));
+	$message = '<div class="alert alert-success"><strong>Avatar byl smazán</strong></div>';
   
 } while(0);
 
@@ -144,7 +162,6 @@ if (isset($_GET["chpass"])) {
 		}
 		
 		if (!check_type($_POST["username"], "username")) {
-			echo $_POST["username"];
 			$message .= "Jméno může obsahovat jen písmena, čísla, pomlčku a podtržítko!<br>";
 			$err = true;
 		}
@@ -228,4 +245,94 @@ if (isset($_GET["chpass"])) {
 	
 }
 
+if (isset($_GET["enableg"])) do {
+	
+	if (!validate_csrf($_GET["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
+	
+	require "lib/twofactor/GoogleAuthenticator.php";
+	$google2fa = new PHPGangsta_GoogleAuthenticator();
+	$secret = $google2fa->createSecret();
+	
+	$mysql->query("UPDATE `users` SET `2fa_gauth` = ". $mysql->quote($secret) ." WHERE `id` = ". $mysql->quote($_SESSION["id"]) .";");
+	header("Location: index.php?p=settings&2fa");
+	die();
+	
+} while(0);
+
+if (isset($_GET["disableg"])) do {
+	
+	if (!validate_csrf($_GET["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
+	
+	$mysql->query("UPDATE `users` SET `2fa_gauth` = NULL WHERE `id` = ". $mysql->quote($_SESSION["id"]) .";");
+	header("Location: index.php?p=settings&2fa");
+	die();
+	
+} while(0);
+
+if (isset($_POST["enabley"])) do {
+	
+	if (!validate_csrf($_POST["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
+	
+	$mysql->query("UPDATE `users` SET `2fa_yubi` = ". $mysql->quote(santise($_POST["yubiid"])) ." WHERE `id` = ". $mysql->quote($_SESSION["id"]) .";");
+	header("Location: index.php?p=settings&2fa");
+	die();
+	
+} while(0);
+
+if (isset($_GET["disabley"])) do {
+	
+	if (!validate_csrf($_GET["csrf"])) {
+		$message = '<div class="alert alert-danger"><strong>Nesouhlasí CSRF token - to může znamenat pokus o útok!</strong></div>';
+		break;
+	}
+	
+	$mysql->query("UPDATE `users` SET `2fa_yubi` = NULL WHERE `id` = ". $mysql->quote($_SESSION["id"]) .";");
+	header("Location: index.php?p=settings&2fa");
+	die();
+	
+} while(0);
+
 $csrf = generate_csrf();
+
+if (isset($_GET["newavatar"])) {
+	
+	if (!file_exists("upload/avatars/". santise($_SESSION["id"]))) {
+		$avatar_actions = '<tr><td>Nahrát:</td><td><input type="file" name="avatarFile" id="avatarFile" class="form-control"></td></tr>
+		<tr><td>&nbsp;</td><td><input type="submit" name="setavatar" value="Nahrát" class="btn btn-default"></td></tr>';
+	} else {
+		$avatar_actions = '<tr><td>&nbsp;</td><td><a href="index.php?p=settings&newavatar&removeavatar&csrf='. $csrf .'" class="btn btn-danger">Smazat avatara</a></td></tr>';
+	}
+}
+
+if (isset($_GET["2fa"]) and ($sys["twofactor_yubi"] or $sys["twofactor_gauth"])) {
+	if ($sys["twofactor_gauth"]) {
+		$gauth_token = $mysql->query("SELECT `2fa_gauth` FROM `users` WHERE `id` = ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
+		$gauth_token = $gauth_token["2fa_gauth"];
+		if (empty($gauth_token)) {
+			$gauth = '<tr><td>Google Authenticator - akce:</td><td><a href="index.php?p=settings&2fa&enableg&csrf='. $csrf .'" class="btn btn-info">Povolit</a></td></tr>';
+		} else {
+			$gauth = '<tr><td>Google Authenticator tajný klíč:</td><td><input type="text" value="'. $usr["2fa_gauth"] .'" class="form-control" disabled="disabled"></td></tr>
+			<tr><td>Google Authenticator - akce:</td><td><a href="index.php?p=settings&2fa&disableg&csrf='. $csrf .'" class="btn btn-danger">Zakázat</a></td></tr>';
+		}
+	}
+	if ($sys["twofactor_yubi"]) {
+		$yubi = $mysql->query("SELECT `2fa_yubi` FROM `users` WHERE `id` = ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
+		$yubi = $yubi["2fa_yubi"];
+		if (empty($yubi)) {
+			$yubikey = '<form method="post"><tr><td>YubiKey ID klíče:</td><td><input type="text" name="yubiid" class="form-control"></td></tr>
+			<tr><td>YubiKey - akce:</td><td><button type="submit" name="enabley" class="btn btn-info">Povolit</a><input type="hidden" value="'. $csrf .'" name="csrf"></td></tr></form>';
+		} else {
+			$yubikey = '<tr><td>YubiKey ID klíče:</td><td><input type="text" value="'. $usr["2fa_yubi"] .'" class="form-control" disabled="disabled"></td></tr>
+			<tr><td>YubiKey - akce:</td><td><a href="index.php?p=settings&2fa&disabley&csrf='. $csrf .'" class="btn btn-danger">Zakázat</a></td></tr>';
+		}
+	}
+}

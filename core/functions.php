@@ -68,7 +68,7 @@ function admin_menu() {
 		}
 	}
 	
-	if (has_access("admin_settings")) {
+	if ($_SESSION["id"] == 0 and isset($_SESSION["id"])) {
 		if ($_GET["p"] == "sys") {
 			$menu .= "<li><a href='admin.php?p=sys' class='act'>Nastavení systému</a></li>";
 		} else {
@@ -178,6 +178,18 @@ function check_type($str, $type) {
 				return false;
 			}
 			break;
+			
+		case "positivewholenum":
+			if (!is_numeric($str)) {
+				return false;
+			}
+			if ($str < 0) {
+				return false;
+			}
+			if (!ctype_digit($str)) {
+				return false;
+			}
+			break;
 
 		case "alphanum":
 			if (!ctype_alnum($str)) {
@@ -192,6 +204,12 @@ function check_type($str, $type) {
 			break;
 			
 		case "text":
+			break;
+		
+		case "nospecial":
+			if(!ctype_alnum(str_replace(array("-", " ", "á", "č", "ď", "é", "ě", "í", "ň", "ó", "ř", "š", "ť", "ů", "ú", "ý", "ž"), '', $str))) {
+				return false;
+			}
 			break;
 		
 		case "date":
@@ -267,4 +285,14 @@ function bb_to_html($text) {
 		'<img src="$1" class="user-image img-responsive" alt="">'
 	);
 	return preg_replace($find,$replace,$text);
+}
+
+function displayAvatar($user_id) {
+	$path = 'upload/avatars/'. santise($user_id);
+	
+	if (!file_exists($path)) {
+		$path = 'upload/avatars/generic.png';
+	}
+	
+	return $path ."?". rand();
 }
