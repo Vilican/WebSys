@@ -17,7 +17,7 @@
 <body>
 <div class="navbar" role="navigation">
 <div class="header">
-<noscript><div class="alert alert-danger txt-center"><strong>Nemáte zapnutý JavaScript. Aby stránky správně fungovaly, musíte si ho zapnout. <a href="http://www.enable-javascript.com/cz/" target="_blank">Návod k zapnutí >></a></strong></div></noscript>
+<noscript><div class="alert alert-danger txt-center"><strong>Nemáte zapnutý JavaScript. Aby stránky správně fungovaly, musíte si ho zapnout. <a href="http://www.enable-javascript.com/cz/" target="_blank" rel="noopener">Návod k zapnutí >></a></strong></div></noscript>
 <h1 class="container"><?php echo $sys["title"]; ?></h1>
 </div>
 <div class="container navb">

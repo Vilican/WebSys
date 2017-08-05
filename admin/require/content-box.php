@@ -29,26 +29,22 @@ if (isset($_POST["submit"]) and validate_csrf($_POST["csrf"])) {
 }
 
 $boxes = $mysql->query("SELECT * FROM `boxes` ORDER BY `ord` ASC;");
-if ($boxes->num_rows > 0) {
-	$page["content"] .= '<div id="boxes" class="tab-pane fade'. $div_boxes .'">'. $message .'<form method="post" action="admin.php?p=content&boxes"><button name="submit" type="submit" class="btn btn-primary">Uložit změny</button> <a href="admin.php?p=content-new-box" class="btn btn-primary">Přidat box</a><hr>';
-	while($box = $boxes->fetch_assoc()) {
-		$pom++;
-		if ($pom % 2 != 0) {
-			$page["content"] .= '<div class="row separate">';
-		}
-		
-		$page["content"] .= '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">Obsah: <textarea class="form-control separate" name="content-'. $box["id"] .'">'. $box["content"] .'</textarea>Pořadí: <input type="text" name="ord-'. $box["id"] .'" value="'. $box["ord"] .'" class="form-control separate">
-		Přístup: <input type="text" name="access-'. $box["id"] .'" value="'. $box["access"] .'" class="form-control separate"><input type="checkbox" name="visible-'. $box["id"] .'"'. parse_to_checkbox($box["visible"]) .'> Viditelné
-		<a href="admin.php?p=content-delete-box&id='. $box["id"] .'" class="btn btn-danger btn-xs rfloat">Odstranit</a></div>';
-		
-		if ($pom % 2 == 0) {
-			$page["content"] .= '</div><hr>';
-		}
-	}
+$page["content"] .= '<div id="boxes" class="tab-pane fade'. $div_boxes .'">'. $message .'<form method="post" action="admin.php?p=content&boxes"><button name="submit" type="submit" class="btn btn-primary">Uložit změny</button> <a href="admin.php?p=content-new-box" class="btn btn-primary">Přidat box</a><hr>';
+while ($boxes->num_rows > 0 and $box = $boxes->fetch_assoc()) {
+	$pom++;
 	if ($pom % 2 != 0) {
+		$page["content"] .= '<div class="row separate">';
+	}
+	
+	$page["content"] .= '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">Obsah: <textarea class="form-control separate" name="content-'. $box["id"] .'">'. $box["content"] .'</textarea>Pořadí: <input type="text" name="ord-'. $box["id"] .'" value="'. $box["ord"] .'" class="form-control separate">
+	Přístup: <input type="text" name="access-'. $box["id"] .'" value="'. $box["access"] .'" class="form-control separate"><input type="checkbox" name="visible-'. $box["id"] .'"'. parse_to_checkbox($box["visible"]) .'> Viditelné
+	<a href="admin.php?p=content-delete-box&id='. $box["id"] .'" class="btn btn-danger btn-xs rfloat">Odstranit</a></div>';
+	
+	if ($pom % 2 == 0) {
 		$page["content"] .= '</div><hr>';
 	}
-	$page["content"] .= '<input type="hidden" name="csrf" value="'. generate_csrf() .'"></form></div>';
-} else {
-	$page["content"] = '<div class="alert alert-warning"><strong>Neexistují žádné boxy!</strong></div>';
 }
+if ($pom % 2 != 0) {
+	$page["content"] .= '</div><hr>';
+}
+$page["content"] .= '<input type="hidden" name="csrf" value="'. generate_csrf() .'"></form></div>';

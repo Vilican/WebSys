@@ -6,6 +6,11 @@ if (!defined("_PW")) {
 
 do {
 	
+	if (isset($_GET["id"])) {
+		require "article.php";
+		break;
+	}
+	
 	if (!empty($page["content"])) {
 		$page["content"] .= '<hr>';
 	}
