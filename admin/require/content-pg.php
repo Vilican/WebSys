@@ -5,13 +5,16 @@ $page["content"] .= '<div id="pages" class="tab-pane fade">';
 if (has_access("admin_content_edit") or has_access("admin_content_edit_all")) {
 	$page["content"] .= '<p><form method="post" action="admin.php?p=content">
 Vytvořit: <select name="type">'. $options .'</select>
-<button type="submit" class="btn btn-primary btn-xs">Přidat</button>
-</form></p>';
+<button type="submit" class="btn btn-primary btn-xs">Přidat</button>';
+	if (has_access("admin_content_sethome")) {
+		$page["content"] .= ' <a href="admin.php?p=content-sethome" class="btn btn-warning btn-xs">Změnit hlavní stránku</a>';
+	}
+	$page["content"] .= '</form></p>';
 }
 
-$page["content"] .= '<table class="table table-hover table-hover table-bordered table-responsive"><thead><tr><th>ID</th><th>Název</th><th>Editor</th><th>Typ</th><th>Přístup</th><th>Pořadí</th><th>Akce</th></tr></thead><tbody>';
+$page["content"] .= '<table class="table table-hover table-hover table-bordered table-responsive"><thead><tr><th>ID</th><th>Název</th><th>Editor</th><th>Typ</th><th>Přístup</th><th>Pořadí</th><th>Pod stránkou</th><th>Akce</th></tr></thead><tbody>';
 
-$pages = $mysql->query("SELECT `pages`.`id`, `pages`.`title`, `pages`.`type`, `pages`.`ord`, `pages`.`author`, `pages`.`visible`, `pages`.`access`, `users`.`username` FROM `pages` INNER JOIN `users` ON `pages`.`author` = `users`.`id` ORDER BY `pages`.`ord` ASC;");
+$pages = $mysql->query("SELECT `pages`.`id`, `pages`.`title`, `pages`.`type`, `pages`.`ord`, `pages`.`parent`, `pages`.`author`, `pages`.`visible`, `pages`.`access`, `users`.`username` FROM `pages` INNER JOIN `users` ON `pages`.`author` = `users`.`id` ORDER BY `pages`.`ord` ASC;");
 if ($pages->num_rows > 0) {
 	while($row_page = $pages->fetch_assoc()) {
 		$actions = null;
@@ -26,7 +29,8 @@ if ($pages->num_rows > 0) {
 		if (has_access("admin_content_delete_all") or (has_access("admin_content_delete") and $row_page["author"] == $_SESSION["id"])) {
 			$actions .= '<a href="admin.php?p=content-delete&id='. $row_page["id"] .'" class="btn btn-danger">Smazat</a>';
 		}
-		$page["content"] .= "<tr><td>". $row_page["id"] ."</td><td>". $row_page["title"] ."</td><td>". $row_page["username"] ."</td><td>". $page_types[$row_page["type"]] ."</td><td>". $row_page["access"] ."</td><td>". $row_page["ord"] .'</td><td><div class="btn-group btn-group-sm">'. $actions .'</div></td></tr>';
+		if (empty($row_page["parent"])) { $row_page["parent"] = '-'; }
+		$page["content"] .= "<tr><td>". $row_page["id"] ."</td><td>". $row_page["title"] ."</td><td>". $row_page["username"] ."</td><td>". $page_types[$row_page["type"]] ."</td><td>". $row_page["access"] ."</td><td>". $row_page["ord"] .'</td><td>'. $row_page["parent"] .'</td><td><div class="btn-group btn-group-sm">'. $actions .'</div></td></tr>';
 	}
 }
 

@@ -2546,12 +2546,6 @@ textarea.input-group-sm>.input-group-btn>.btn {
     background-color: transparent;
     cursor: not-allowed
 }
-.nav .open>a,
-.nav .open>a:focus,
-.nav .open>a:hover {
-    background-color: #2cc990;
-    border-color: #2cc990
-}
 .nav .nav-divider {
     height: 1px;
     margin: 10px 0;

@@ -75,9 +75,13 @@ do {
 			break;
 		}
 		
+		if ($_POST["parent"] != "NULL") {
+			$_POST["parent"] = $mysql->quote($_POST["parent"]);
+		}
+		
 		$insert_fields = mysql_page_fields_new($_GET["type"]);
-
-		$mysql->query("INSERT INTO `pages` (`id`, `title`, `content`, `description`, `type`, `ord`, `author`, `visible`, `access`". $insert_fields[0] .") VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote(santise($_POST["title"])) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote(santise($_POST["description"])) .", ". $mysql->quote($_GET["type"]) .", ". $mysql->quote($_POST["ord"]) .", ". $mysql->quote($_SESSION["id"]) .", ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", ". $mysql->quote($_POST["access"]) . $insert_fields[1] .");");
+		
+		$mysql->query("INSERT INTO `pages` (`id`, `title`, `content`, `description`, `type`, `ord`, `parent`, `author`, `visible`, `access`". $insert_fields[0] .") VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote(santise($_POST["title"])) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote(santise($_POST["description"])) .", ". $mysql->quote($_GET["type"]) .", ". $mysql->quote($_POST["ord"]) .", ". $_POST["parent"] .", ". $mysql->quote($_SESSION["id"]) .", ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", ". $mysql->quote($_POST["access"]) . $insert_fields[1] .");");
 		$mysql->query("INSERT INTO `phistory` (`page`, `content`, `author`) VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote($_SESSION["id"]) .");");
 		
 		if ($_GET["type"] == 4) {
@@ -91,6 +95,14 @@ do {
 		
 	} while(0);
 	
+	$parents = $mysql->query("SELECT `id` FROM `pages` WHERE `parent` IS NULL ORDER BY `id` ASC;");
+	$parent_options = '<option value="NULL">(žádná)</option>';
+	if ($parents->num_rows > 0) {
+		while($parent = $parents->fetch_assoc()) {
+			$parent_options .= '<option value="'. $parent["id"] .'">'. $parent["id"] .'</option>';
+		}
+	}
+	
 	$ckeditor = true;
 	$page["content"] .= $message .'
 <form method="post"><table style="border-spacing: 10px">
@@ -101,6 +113,7 @@ do {
 <tr><td>Pořadí:</td><td><input type="text" name="ord" class="form-control" value="'. santise($_POST["ord"]) .'"></td></tr>
 <tr><td>Přístup čtení:</td><td><input type="text" name="access" class="form-control" value="'. santise($_POST["access"]) .'"></td></tr>
 '. show_page_fields_new($_GET["type"]) .'
+<tr><td>Nadřazená stránka:</td><td><select name="parent" class="form-control">'. $parent_options .'</select></td></tr>
 <tr><td>Viditelnost:</td><td><input type="checkbox" name="visibility" class="form-control"></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Vytvořit" class="btn btn-default"></td></tr>
 </table></form>';

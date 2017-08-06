@@ -48,7 +48,7 @@ do {
 				$string_old = $records->fetch_assoc();
 			}
 			
-			$page["content"] .= '<p>Provedl uživatel '. $string_new["username"] .', '. date("j.n.Y G:i", strtotime($string_new["time"])) .'</p><em>V rozdílech se nemusí zobrazovat změny formátování.</em><hr style="">';
+			$page["content"] .= '<p>Provedl uživatel '. $string_new["username"] .', '. date("j.n.Y G:i", strtotime($string_new["time"])) .'</p><em>V rozdílech se nemusí zobrazovat změny formátování a změny jiné než obsahové.</em><hr style="">';
 			
 			$diff = new HtmlDiff($string_old["content"], $string_new["content"]);
 			$diff->build();

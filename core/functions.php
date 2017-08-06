@@ -2,13 +2,28 @@
 
 function menu() {
 	global $mysql;
-	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1' ORDER BY `ord` ASC;");
+	$pages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `ord` < 11 AND `visible` = '1' AND `parent` IS NULL ORDER BY `ord` ASC;");
 	if ($pages->num_rows > 0) {
 		while($menu_page = $pages->fetch_assoc()) {
-			if ($_GET["p"] == $menu_page["id"]) {
-				$menu .= "<li><a href='index.php?p=".$menu_page["id"]."' class='act'>".$menu_page["title"]."</a></li>";
+			$subpages = $mysql->query("SELECT `id`, `title` FROM `pages` WHERE `visible` = '1' AND `parent` = ". $mysql->quote($menu_page["id"]) ." ORDER BY `ord` ASC;");
+			if ($subpages->num_rows == 0) {
+				if ($_GET["p"] == $menu_page["id"]) {
+					$menu .= "<li><a href='index.php?p=".$menu_page["id"]."' class='act'>".$menu_page["title"]."</a></li>";
+				} else {
+					$menu .= "<li><a href='index.php?p=".$menu_page["id"]."'>".$menu_page["title"]."</a></li>";
+				}
 			} else {
-				$menu .= "<li><a href='index.php?p=".$menu_page["id"]."'>".$menu_page["title"]."</a></li>";
+				
+				$menu .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="index.php?p='.$menu_page["id"].'">'.$menu_page["title"].'<span class="caret"></span></a><ul class="dropdown-menu">';
+				while($submenu_page = $subpages->fetch_assoc()) {
+					if ($_GET["p"] == $submenu_page["id"]) {
+						$menu .= '<li><a href="index.php?p='.$submenu_page["id"].'" class="act">'.$submenu_page["title"].'</a></li>';
+					} else {
+						$menu .= '<li><a href="index.php?p='.$submenu_page["id"].'">'.$submenu_page["title"].'</a></li>';
+					}
+				}
+				$menu .= '</ul></li>';
+				
 			}
 		}
 	}

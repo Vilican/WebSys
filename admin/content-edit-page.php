@@ -49,6 +49,12 @@ do {
 		$message .= '<div class="alert alert-success"><strong>Stránka byla vytvořena</strong></div>';
 	}
 	
+	$has_subpages = $mysql->query("SELECT `id` FROM `pages` WHERE `parent` = ". $mysql->quote($pg["id"]) .";")->num_rows;
+	if ($has_subpages > 0) {
+		$noparent = ' disabled="disabled"';
+		$_POST["parent"] = "NULL";
+	}
+	
 	require "admin/require/page-extras.php";
 	
 	if (isset($_POST["submit"])) do {
@@ -102,17 +108,33 @@ do {
 			$err = true;
 		}
 		
+		if ($_POST["parent"] != "NULL") {
+			$_POST["parent"] = $mysql->quote($_POST["parent"]);
+		}
+		
 		if ($err) {
 			$message = '<div class="alert alert-danger"><p><strong>Při ukládání došlo k následujícím chybám:</strong></p><p>'. $message .'</p></div>';
 			break;
 		}
-
-		$mysql->query("UPDATE `pages` SET `id` = ". $mysql->quote($_POST["id"]) .", `title` = ". $mysql->quote(santise($_POST["title"])) .", `content` = ". $mysql->quote($_POST["content"]) .", `description` = ". $mysql->quote(santise($_POST["description"])) .", `ord` = ". $mysql->quote($_POST["ord"]) .", `visible` = ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", `access` = ". $mysql->quote($_POST["access"]) . mysql_page_fields_edit($pg["type"]) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
+		
+		$mysql->query("UPDATE `pages` SET `id` = ". $mysql->quote($_POST["id"]) .", `title` = ". $mysql->quote(santise($_POST["title"])) .", `content` = ". $mysql->quote($_POST["content"]) .", `description` = ". $mysql->quote(santise($_POST["description"])) .", `ord` = ". $mysql->quote($_POST["ord"]) .", `visible` = ". $mysql->quote(parse_from_checkbox($_POST["visibility"])) .", `parent` = ". $_POST["parent"] .", `access` = ". $mysql->quote($_POST["access"]) . mysql_page_fields_edit($pg["type"]) ." WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";");
 		$mysql->query("INSERT INTO `phistory` (`page`, `content`, `author`) VALUES (". $mysql->quote($_POST["id"]) .", ". $mysql->quote($_POST["content"]) .", ". $mysql->quote($_SESSION["id"]) .");");
 		$message = '<div class="alert alert-success"><strong>Stránka upravena</strong></div>';
 		$pg = $mysql->query("SELECT * FROM `pages` WHERE `pages`.`id` = ". $mysql->quote($_GET["id"]) .";")->fetch_assoc();
 		
 	} while (0);
+	
+	$parents = $mysql->query("SELECT `id` FROM `pages` WHERE `parent` IS NULL ORDER BY `id` ASC;");
+	$parent_options = '<option value="NULL">(žádná)</option>';
+	if ($parents->num_rows > 0) {
+		while($parent = $parents->fetch_assoc()) {
+			$selected = null;
+			if ($pg["parent"] == $parent["id"]) {
+				$selected = ' selected="selected"';
+			}
+			$parent_options .= '<option value="'. $parent["id"] .'"'. $selected .'>'. $parent["id"] .'</option>';
+		}
+	}
 	
 	$ckeditor = true;
 	$page["content"] .= $message .'
@@ -124,6 +146,7 @@ do {
 <tr><td>Pořadí:</td><td><input type="text" name="ord" class="form-control" value="'. restore_value($pg["ord"], santise($_POST["ord"])) .'"></td></tr>
 <tr><td>Přístup čtení:</td><td><input type="text" name="access" class="form-control" value="'. restore_value($pg["access"], santise($_POST["access"])) .'"></td></tr>
 '. show_page_fields_edit($pg["type"], $pg) .'
+<tr><td>Nadřazená stránka:</td><td><select name="parent" class="form-control"'. $noparent .'>'. $parent_options .'</select></td></tr>
 <tr><td>Viditelnost:</td><td><input type="checkbox" name="visibility" class="form-control"'. parse_to_checkbox($pg["visible"]) .'></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Upravit" class="btn btn-default"></td></tr>
 </table></form>';
