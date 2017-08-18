@@ -59,6 +59,19 @@ if (isset($_POST["save"])) do {
 		$mysql->query("UPDATE `settings` SET `value` = 0 WHERE `setting` = 'twofactor_yubi';");
 	}
 	
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["bodybackground"] ."' WHERE `setting` = 'bodybackground';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["bodytxtcolor"] ."' WHERE `setting` = 'bodytxtcolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["headercolortop"] ."' WHERE `setting` = 'headercolortop';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["headercolorbottom"] ."' WHERE `setting` = 'headercolorbottom';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["navcolor"] ."' WHERE `setting` = 'navcolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["navtextcolor"] ."' WHERE `setting` = 'navtextcolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["navactivecolor"] ."' WHERE `setting` = 'navactivecolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["titlecolor"] ."' WHERE `setting` = 'titlecolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["wellcolor"] ."' WHERE `setting` = 'wellcolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["wellborder"] ."' WHERE `setting` = 'wellborder';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["hrcolor"] ."' WHERE `setting` = 'hrcolor';");
+	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["submenucaretcolor"] ."' WHERE `setting` = 'submenucaretcolor';");
+	
 	if (!check_type($_POST["slidewidth"], "positivewholenum") or empty($_POST["slidewidth"])) {
 		$message .= '<div class="alert alert-danger"><strong>Šířka posuvníku - smí obsahovat pouze kladná celá čísla!</strong></div>';
 	} else {

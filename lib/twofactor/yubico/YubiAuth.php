@@ -4,7 +4,7 @@
  * 
  * Created by Matyáš Koc
  *
- * Published under * license
+ * Published under Creative Commons BY-NC-SA license
  */
 class YubiAuth {
     

@@ -1,3 +1,5 @@
+(this licence is for GoogleAuthenticator.php)
+
 Copyright (c) 2012, Michael Kliewe All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,

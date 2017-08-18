@@ -12,7 +12,11 @@ $galery = true;
 $target = "upload/". $page["id"] ."/";
 $files = array_diff(scandir($target), array('.', '..'));
 
+$page["content"] .= '<div class="popup-gallery">';
+
 foreach ($files as $value) {
-	$page["content"] .= '<a class="fancybox" rel="galerie" href="'. $target . $value .'"><img data-src="'. $target . $value .'" class="gal-mini"></a>
+	$page["content"] .= '<a href="'. $target . $value .'"><img src="'. $target . $value .'" class="gal-mini"></a>
 ';
 }
+
+$page["content"] .= '</div>';

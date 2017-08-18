@@ -13,6 +13,7 @@
     <script src="template/js/respond.js"></script>
     <![endif]-->
 <link href="template/css/theme.css" rel="stylesheet">
+<style>body{background:<?php echo $sys["bodybackground"]; ?>;color:<?php echo $sys["bodytxtcolor"]; ?>}.header{background:linear-gradient(180deg, <?php echo $sys["headercolortop"]; ?>, <?php echo $sys["headercolorbottom"]; ?>)}h1,h2{color:<?php echo $sys["titlecolor"]; ?> !important}.navb .container, .navbar{background:<?php echo $sys["navcolor"]; ?>}.dropdown-menu, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{background-color:<?php echo $sys["navcolor"]; ?>}hr{border-top: 1px solid <?php echo $sys["hrcolor"]; ?>}.well{background-color:<?php echo $sys["wellcolor"]; ?>;border: 1px solid <?php echo $sys["wellborder"]; ?> !important}.nav>li>a{color:<?php echo $sys["navtextcolor"]; ?>}.nav .caret, .nav .caret a:hover{border-top-color: <?php echo $sys["navtextcolor"]; ?> !important;border-bottom-color: <?php echo $sys["navtextcolor"]; ?> !important}.dropdown-menu:before{border-bottom: 5px solid <?php echo $sys["submenucaretcolor"]; ?>}.act{color:<?php echo $sys["navactivecolor"]; ?> !important}</style>
 </head>
 <body>
 <div class="navbar" role="navigation">
@@ -63,10 +64,10 @@ Vytvořil <?php echo $sys["author"]; ?><?php if (!$unbranded) { echo ' pomocí <
 <script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
 <?php if ($jsthread) { echo '<script src="template/js/thread.js"></script>'; } ?>
-<?php if ($galery) { echo '<link rel="stylesheet" href="lib/fancybox/jquery.fancybox.css" type="text/css" media="screen">
+<?php if ($galery) { echo '<link rel="stylesheet" href="template/css/magnific.css" type="text/css" media="screen">
 <script type="text/javascript" src="lib/laziestloader.js"></script>
-<script type="text/javascript" src="lib/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">$(document).ready(function() { $(".fancybox").fancybox(); });</script>
+<script type="text/javascript" src="template/js/magnific.js"></script>
+<script type="text/javascript">$(".popup-gallery").ready(function(){$(".popup-gallery").magnificPopup({delegate: "a",type:"image",mainClass:"mfp-img-mobile",tLoading:"Načítání ...",gallery:{enabled:true,navigateByImgClick:true,preload: [0,1] }});});</script>
 <script type="text/javascript">$(".gal-mini").laziestloader({threshold:200});</script>'; } ?>
 </body>
 </html>

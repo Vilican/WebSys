@@ -115,6 +115,54 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 		<div id="design" class="tab-pane fade">
 			<div class="row col-lg-6 col-sm-9 col-xs-12">
 				<div class="form-group">
+					<label class="control-label" for="bodybackground">Barva pozadí:</label>
+					<input type="text" class="form-control" id="bodybackground" name="bodybackground" value="' . $sys["bodybackground"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="bodytxtcolor">Barva textu:</label>
+					<input type="text" class="form-control" id="bodytxtcolor" name="bodytxtcolor" value="' . $sys["bodytxtcolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="headercolortop">Horní barva přechodu:</label>
+					<input type="text" class="form-control" id="headercolortop" name="headercolortop" value="' . $sys["headercolortop"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="headercolorbottom">Dolní barva přechodu:</label>
+					<input type="text" class="form-control" id="headercolorbottom" name="headercolorbottom" value="' . $sys["headercolorbottom"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="navcolor">Barva nabídky:</label>
+					<input type="text" class="form-control" id="navcolor" name="navcolor" value="' . $sys["navcolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="navtextcolor">Barva odkazů nabídky:</label>
+					<input type="text" class="form-control" id="navtextcolor" name="navtextcolor" value="' . $sys["navtextcolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="navactivecolor">Barva aktivního odkazu nabídky:</label>
+					<input type="text" class="form-control" id="navactivecolor" name="navactivecolor" value="' . $sys["navactivecolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="titlecolor">Barva nadpisů:</label>
+					<input type="text" class="form-control" id="titlecolor" name="titlecolor" value="' . $sys["titlecolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="wellcolor">Pozadí rámečků:</label>
+					<input type="text" class="form-control" id="wellcolor" name="wellcolor" value="' . $sys["wellcolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="wellborder">Barva ohraničení rámečků:</label>
+					<input type="text" class="form-control" id="wellborder" name="wellborder" value="' . $sys["wellborder"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="hrcolor">Barva předělovacích čar:</label>
+					<input type="text" class="form-control" id="hrcolor" name="hrcolor" value="' . $sys["hrcolor"] . '">
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="submenucaretcolor">Barva šipky u podmenu:</label>
+					<input type="text" class="form-control" id="submenucaretcolor" name="submenucaretcolor" value="' . $sys["submenucaretcolor"] . '">
+				</div>
+				<div class="form-group">
 					<label class="control-label" for="slidewidth">Šířka posuvníku:</label>
 					<input type="text" class="form-control" id="slidewidth" name="slidewidth" value="' . $sys["slidewidth"] . '">
 				</div>
@@ -134,10 +182,86 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 			</div>
 		</div>
 		<div id="sys" class="tab-pane fade">
-			<div class="row col-lg-6 col-sm-9 col-xs-12">
-				<p>WebSys verze 1.0 <span class="text-danger">BETA</span></p>
-				<p>Vytvořil Matyáš Koc</p>
-				<p>Systém je povoleno využívat jen v souladu s licencí</p>
+			<div class="row col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">WebSys v1.0 Ares <span class="label label-warning">beta verze</span></div>
+					<div class="panel-body">
+						<p>Vytvořil Matyáš Koc</p>
+						<p>Systém je povoleno využívat jen v souladu s <a href="https://websys.sufix.cz/index.php?p=lic">aktivní licencí</a></p>
+					</div>
+				</div>
+				<p>Byly použity následující moduly:</p>
+				<table class="table table-hover table-hover table-bordered table-responsive">
+					<thead>
+						<tr>
+							<th>Jméno modulu</th>
+							<th>Autor</th>
+							<th>Licence</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Bootstrap</td>
+							<td>Twitter, Inc.</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>CKEditor</td>
+							<td>CKSource</td>
+							<td>MPL</td>
+						</tr>
+						<tr>
+							<td>HTMLDiff</td>
+							<td>Rashid Mohamad</td>
+							<td>GPL v2.0</td>
+						</tr>
+						<tr>
+							<td>HTML5 Shiv</td>
+							<td>Alexander Farkas</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>jQuery</td>
+							<td>JS Foundation</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>LaziestLoader</td>
+							<td>Josh Williams</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>Magnific Popup</td>
+							<td>Dmitry Semenov</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>Nicescroll</td>
+							<td>InuYaksa</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>PHPGangsta_GoogleAuthenticator</td>
+							<td>Michael Kliewe</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>PHPMailer</td>
+							<td>Marcus Bointon</td>
+							<td>LGPL</td>
+						</tr>
+						<tr>
+							<td>Respond.js</td>
+							<td>Scott Jehl</td>
+							<td>MIT</td>
+						</tr>
+						<tr>
+							<td>YubiAuth</td>
+							<td>Matyáš Koc</td>
+							<td>CC BY-NC-SA (MIT pro WebSys)</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

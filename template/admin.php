@@ -12,6 +12,7 @@
     <script src="template/js/respond.js"></script>
     <![endif]-->
 <link href="template/css/theme.css" rel="stylesheet">
+<style>body{background:<?php echo $sys["bodybackground"]; ?>;color:<?php echo $sys["bodytxtcolor"]; ?>}.header{background:linear-gradient(180deg, <?php echo $sys["headercolortop"]; ?>, <?php echo $sys["headercolorbottom"]; ?>)}h1,h2{color:<?php echo $sys["titlecolor"]; ?> !important}.navb .container, .navbar{background:<?php echo $sys["navcolor"]; ?>}.dropdown-menu, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{background-color:<?php echo $sys["navcolor"]; ?>}hr{border-top: 1px solid <?php echo $sys["hrcolor"]; ?>}.well{background-color:<?php echo $sys["wellcolor"]; ?>;border: 1px solid <?php echo $sys["wellborder"]; ?> !important}.nav>li>a{color:<?php echo $sys["navtextcolor"]; ?>}.nav .caret, .nav .caret a:hover{border-top-color: <?php echo $sys["navtextcolor"]; ?> !important;border-bottom-color: <?php echo $sys["navtextcolor"]; ?> !important}.dropdown-menu:before{border-bottom: 5px solid <?php echo $sys["submenucaretcolor"]; ?>}.act{color:<?php echo $sys["navactivecolor"]; ?> !important}.nav-inpage>li>a{color:#333}</style>
 </head>
 <body>
 <div class="navbar" role="navigation">

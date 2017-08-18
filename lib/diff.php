@@ -1,7 +1,5 @@
 <?php
 
-# https://github.com/rashid2538/php-htmldiff
-
 	class HtmlDiff {
 		private $content;
 		private $oldText;
