@@ -267,8 +267,8 @@ html {
 }
 body {
     font-family: "Helvetica CE", Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    line-height: 1.428571429;
+    font-size: 15px;
+    line-height: 1.65;
     color: #333
 }
 button,
@@ -3840,7 +3840,7 @@ a.list-group-item:hover {
 }
 .well {
     min-height: 20px;
-    padding: 19px;
+    padding: 20px 30px;
     margin-bottom: 20px;
     background-color: #fafcfd;
 	border: 1px solid #c4c4c4 !important
