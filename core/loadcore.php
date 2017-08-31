@@ -3,6 +3,10 @@
 require "config.php";
 require "database.php";
 
+if (file_exists("setup/")) {
+	throw_error("Adresář setup pro instalaci stále existuje. Smažte ho.");
+}
+
 $settings = $mysql->query("SELECT * FROM `settings`");
 while ($setting = $settings->fetch_assoc()) {
 	$sys[$setting["setting"]] = $setting["value"];
