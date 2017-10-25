@@ -184,7 +184,7 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 		<div id="sys" class="tab-pane fade">
 			<div class="row col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">WebSys v1.0 Ares <span class="label label-warning">beta verze</span></div>
+					<div class="panel-heading">WebSys v1.01 Ares <span class="label label-warning">beta verze</span></div>
 					<div class="panel-body">
 						<p>Vytvořil Matyáš Koc</p>
 						<p>Systém je povoleno využívat jen v souladu s <a href="https://websys.sufix.cz/index.php?p=lic">aktivní licencí</a></p>

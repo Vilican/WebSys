@@ -19,7 +19,7 @@
 <div class="navbar" role="navigation">
 <div class="header">
 <noscript><div class="alert alert-danger txt-center"><strong>Nemáte zapnutý JavaScript. Aby stránky správně fungovaly, musíte si ho zapnout. <a href="http://www.enable-javascript.com/cz/" target="_blank" rel="noopener">Návod k zapnutí >></a></strong></div></noscript>
-<h1 class="container"><?php echo $sys["title"]; ?></h1>
+<?php if (!file_exists("template/img/header.png")) { echo '<h1 class="container">'. $sys["title"] . '</h1>'; } else { echo '<img class="header-image" src="template/img/header.png" alt="'. $sys["title"] .'">'; } ?>
 </div>
 <div class="container navb">
 <div class="navbar-header">
