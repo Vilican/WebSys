@@ -2,6 +2,11 @@
 
 require "core/loadcore.php";
 
+if (!isset($_SESSION["level"])) {
+    header("Location: index.php?p=login");
+    exit;
+}
+
 if (!has_access("admin")) {
 	$page["content"] = '<div class="alert alert-danger"><strong>Nemáte dostatečné oprávnění ke vstupu do administrace!</strong></div>';
 	require "template/admin.php";

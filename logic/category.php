@@ -34,8 +34,8 @@ do {
 		$paging .= '</ul>';
 	}
 	
-	$articles = $mysql->query("SELECT `articles`.`id`, `articles`.`title`, `users`.`username`, `articles`.`date`, `articles`.`description` FROM `articles` INNER JOIN `users` ON `articles`.`author` = `users`.`id` WHERE `articles`.`location` = ". $mysql->quote($page["id"]) ." AND `approved` = 1 ORDER BY `articles`.`date` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
-	
+	$articles = $mysql->query("SELECT `articles`.`id`, `articles`.`title`, `users`.`username`, `articles`.`date`, `articles`.`description` FROM `articles` INNER JOIN `users` ON `articles`.`author` = `users`.`id` WHERE `articles`.`location` = ". $mysql->quote($page["id"]) ." AND `approved` = 1 ORDER BY `articles`.`date` DESC LIMIT ". $sys["paging"] ." OFFSET ". ($sys["paging"] * ($_GET["page"] - 1)) .";");
+
 	if ($articles->num_rows > 0) {
 		
 		$page["content"] .= $paging .'<div class="list-group">';

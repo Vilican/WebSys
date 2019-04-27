@@ -39,7 +39,7 @@ do {
 		$paging .= '</ul>';
 	}
 	
-	$topics = $mysql->query("SELECT `topics`.`id`, `topics`.`name` FROM `topics` WHERE `topics`.`location` = ". $mysql->quote($page["id"]) ." AND `deleted` = 0 ORDER BY `topics`.`lastact` DESC LIMIT ". ($sys["paging"] * ($_GET["page"] - 1)) .", ". ($sys["paging"] * $_GET["page"] - 1) .";");
+	$topics = $mysql->query("SELECT `topics`.`id`, `topics`.`name` FROM `topics` WHERE `topics`.`location` = ". $mysql->quote($page["id"]) ." AND `deleted` = 0 ORDER BY `topics`.`lastact` DESC LIMIT ". $sys["paging"] ." OFFSET ". ($sys["paging"] * ($_GET["page"] - 1)) .";");
 	
 	if (($page["param2"] <= $_SESSION["level"] or $_SESSION["id"] == 0) and isset($_SESSION["id"]) and has_access("thread_create")) {
 		$page["content"] .= '<p><button type="button" class="btn btn-default btn-sm thread-add">Přidat téma</button></p><div id="modal" class="modal fade" role="dialog"></div>

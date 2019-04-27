@@ -75,10 +75,10 @@ do {
 	$ckeditor = true;
 	$page["content"] .= $message .'
 <form method="post"><table style="border-spacing: 10px">
-<tr><td>Kategorie:</td><td><select name="location" class="form-control">'. $categories .'</select></td></tr>
-<tr><td>Titulek:</td><td><input type="text" name="title" class="form-control" value="'. restore_value($art["title"], santise($_POST["title"])) .'"></td></tr>
+<tr><td>Kategorie <span class="text-danger">*</span>:</td><td><select name="location" class="form-control">'. $categories .'</select></td></tr>
+<tr><td>Titulek <span class="text-danger">*</span>:</td><td><input type="text" name="title" class="form-control" value="'. restore_value($art["title"], santise($_POST["title"])) .'"></td></tr>
 <tr><td>Popis:</td><td><textarea name="description" class="form-control">'. restore_value($art["description"], santise($_POST["description"])) .'</textarea></td></tr>
-<tr><td>Obsah:</td><td><textarea name="content" class="form-control">'. restore_value($art["text"], $_POST["content"]) .'</textarea>'. $lic .'</td></tr>
+<tr><td>Obsah <span class="text-danger">*</span>:</td><td><textarea name="content" class="form-control">'. restore_value($art["text"], $_POST["content"]) .'</textarea>'. $lic .'</td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Upravit" class="btn btn-default"></td></tr>
 </table></form>';
 

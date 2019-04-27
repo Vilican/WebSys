@@ -34,6 +34,13 @@ require "functions.php";
 $page_types = array(1 => 'stránka', 2 => 'diskuze', 3 => 'fórum', 4 => 'galerie', 5 => 'kategorie');
 
 if (isset($_SESSION["id"])) {
+    if ($_SESSION["timestamp"] < (time()-1200)) {
+        session_unset();
+        session_destroy();
+        header("Location: index.php?p=login");
+        exit;
+    }
+    $_SESSION["timestamp"] = time();
 	$mysql->update_activity($_SESSION["id"]);
 	$userparams = $mysql->query("SELECT * FROM `users` INNER JOIN `roles` ON `users`.`role` = `roles`.`role_id` WHERE `id`= ". $mysql->quote($_SESSION["id"]) ." LIMIT 1;")->fetch_assoc();
 	unset($user["hash"]);

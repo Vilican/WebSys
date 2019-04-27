@@ -75,6 +75,7 @@ if (isset($_POST["submit"])) do {
 	
 	session_regenerate_id(true);				
 	$_SESSION = $user;
+    $_SESSION["timestamp"] = time();
 	
 	header("Location: index.php");
 	die();
