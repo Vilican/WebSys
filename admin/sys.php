@@ -13,19 +13,13 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 		$sys[$setting["setting"]] = $setting["value"];
 	}
 	
-	switch ($sys["license"]) {
-		case 0:
-			$lic_notice = '<div class="alert alert-warning"><p><strong>Nelicencovaný systém (FREE)</strong></p><p>a) pouze nekomerční použití<br>b) musí zobrazovat zpětný odkaz</p></div>';
-			break;
-		case 1:
-			$lic_notice = '<div class="alert alert-info"><p><strong>Licencovaný systém (PLUS)</strong></p><p>a) komerční použití je povoleno<br>b) musí zobrazovat zpětný odkaz</p></div>';
-			break;
-		case 2:
-			$lic_notice = '<div class="alert alert-success"><p><strong>Licencovaný systém (PRO)</strong></p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován</p></div>';
-			break;
-	}
+	if ($sys["license"] >= 1) {
+        $lic_notice = '<div class="alert alert-success"><p><strong>Licencovaný systém (PRO)</strong></p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován</p></div>';
+	} else {
+        $lic_notice = '<div class="alert alert-warning"><p><strong>Nelicencovaný systém (FREE)</strong></p><p>a) pouze nekomerční použití<br>b) musí zobrazovat zpětný odkaz</p></div>';
+    }
 
-	if ($sys["license"] == 2) {
+	if ($sys["license"] >= 2) {
 		$whitelabel = '<div class="checkbox"><label><input type="checkbox" name="whitelabel"' . parse_to_checkbox($sys["whitelabel"]) . '> Skrýt zpětné odkazy <span class="label label-warning">PRO</span></label></div>';
 	}
 	

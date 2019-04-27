@@ -46,6 +46,6 @@ if (isset($_SESSION["id"])) {
 	}
 }
 
-if ($sys["license"] == 2 and $sys["whitelabel"] == 1) {
+if ($sys["license"] >= 1 and $sys["whitelabel"] == 1) {
 	$unbranded = true;
 }
