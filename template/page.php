@@ -60,8 +60,6 @@ Vytvořil <?php echo $sys["author"]; ?><?php if (!$unbranded) { echo ' pomocí <
 <script src="template/js/jquery.js"></script>
 <script src="template/js/bootstrap.js"></script>
 <script src="template/js/offcanvas.js"></script>
-<script src="template/js/nicescroll.js"></script>
-<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
 <?php if ($jsthread) { echo '<script src="template/js/thread.js"></script>'; } ?>
 <?php if ($galery) { echo '<link rel="stylesheet" href="template/css/magnific.css" type="text/css" media="screen">

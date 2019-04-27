@@ -225,8 +225,6 @@ INSERT INTO `settings` VALUES ('paging', '10');
 INSERT INTO `settings` VALUES ('regallowed', '0');
 INSERT INTO `settings` VALUES ('reggroup', '0');
 INSERT INTO `settings` VALUES ('restrictorigin', '0');
-INSERT INTO `settings` VALUES ('slidecolor', '#1c892b');
-INSERT INTO `settings` VALUES ('slidewidth', '14');
 INSERT INTO `settings` VALUES ('stricthttps', '0');
 INSERT INTO `settings` VALUES ('submenucaretcolor', 'yellow');
 INSERT INTO `settings` VALUES ('title', 'WebSys CMS');
@@ -239,6 +237,8 @@ INSERT INTO `settings` VALUES ('whitelabel', '1');
 INSERT INTO `settings` VALUES ('yubi_id', '');
 INSERT INTO `settings` VALUES ('yubi_key', '');
 INSERT INTO `settings` VALUES ('yubi_url', 'https://api.yubico.com/wsapi/2.0/verify');
+-- Added in 1.1 Boreas
+INSERT INTO `settings` VALUES ('linkcolor', 'blue');
 
 -- ----------------------------
 -- Table structure for topics

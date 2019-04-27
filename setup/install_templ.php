@@ -34,12 +34,12 @@
 <div class="container">
 <div class="row row-offcanvas row-offcanvas-right">
 <div class="row">
-<h2 class="notopmargin">WebSys verze 1.0 (Ares) Beta</h2>
+<h2 class="notopmargin">WebSys verze 1.1 (Boreas)</h2>
 </div>
 <div class="row">
 <form method="post">
 <input type="submit" name="install" class="btn btn-warning" value="Čistá instalace (data v databázi se mohou smazat)">
-<input type="submit" name="update" class="btn btn-primary" value="Aktualizace (nenalezena stará verze)" disabled="disabled">
+<input type="submit" name="update-from10" class="btn btn-primary" value="Aktualizace z 1.0 (Ares)">
 </form>
 </div>
 </div>
@@ -47,8 +47,6 @@
 <script src="template/js/jquery.js"></script>
 <script src="template/js/bootstrap.js"></script>
 <script src="template/js/offcanvas.js"></script>
-<script src="template/js/nicescroll.js"></script>
-<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($jspost) { echo '<script src="template/js/post.js"></script>'; } ?>
 <?php if ($jsthread) { echo '<script src="template/js/thread.js"></script>'; } ?>
 <?php if ($galery) { echo '<link rel="stylesheet" href="template/css/magnific.css" type="text/css" media="screen">

@@ -53,8 +53,6 @@
 <script src="template/js/jquery.js"></script>
 <script src="template/js/bootstrap.js"></script>
 <script src="template/js/offcanvas.js"></script>
-<script src="template/js/nicescroll.js"></script>
-<script>jQuery(document).ready(function() { jQuery('html').niceScroll({cursorcolor:'<?php echo $sys["slidecolor"]; ?>',cursorwidth: <?php echo $sys["slidewidth"]; ?>,zindex: 1001,autohidemode:"leave"}); });</script>
 <?php if ($ckeditor) { echo '<script src="lib/ckeditor/ckeditor.js"></script>
 <script>CKEDITOR.replace("content");</script>'; } ?>
 
