@@ -71,18 +71,7 @@ if (isset($_POST["save"])) do {
 	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["wellborder"] ."' WHERE `setting` = 'wellborder';");
 	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["hrcolor"] ."' WHERE `setting` = 'hrcolor';");
 	$mysql->query("UPDATE `settings` SET `value` = '". $_POST["submenucaretcolor"] ."' WHERE `setting` = 'submenucaretcolor';");
-	
-	if (!check_type($_POST["slidewidth"], "positivewholenum") or empty($_POST["slidewidth"])) {
-		$message .= '<div class="alert alert-danger"><strong>Šířka posuvníku - smí obsahovat pouze kladná celá čísla!</strong></div>';
-	} else {
-		$mysql->query("UPDATE `settings` SET `value` = ". $mysql->quote($_POST["slidewidth"]) ." WHERE `setting` = 'slidewidth';");
-	}
-	
-	if (empty($_POST["slidecolor"])) {
-		$message .= '<div class="alert alert-danger"><strong>Barva posuvníku - musí obsahovat barvu!</strong></div>';
-	} else {
-		$mysql->query("UPDATE `settings` SET `value` = ". $mysql->quote($_POST["slidecolor"]) ." WHERE `setting` = 'slidecolor';");
-	}
+    $mysql->query("UPDATE `settings` SET `value` = '". $_POST["linkcolor"] ."' WHERE `setting` = 'linkcolor';");
 	
 	$mysql->query("UPDATE `settings` SET `value` = ". $mysql->quote(parse_from_checkbox($_POST["whitelabel"])) ." WHERE `setting` = 'whitelabel';");
 	
@@ -117,11 +106,3 @@ if (isset($_POST["save"])) do {
 	}
 	
 } while(0);
-
-
-	
-/*
-<input type="text" class="form-control" id="slidewidth" value="' . $sys["slidewidth"] . '">
-<input type="text" class="form-control" id="slidecolor" value="' . $sys["slidecolor"] . '">
-<input type="text" class="form-control" id="lic">
-*/

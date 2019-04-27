@@ -163,12 +163,8 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 					<input type="text" class="form-control" id="submenucaretcolor" name="submenucaretcolor" value="' . $sys["submenucaretcolor"] . '">
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="slidewidth">Šířka posuvníku:</label>
-					<input type="text" class="form-control" id="slidewidth" name="slidewidth" value="' . $sys["slidewidth"] . '">
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="slidecolor">Barva posuvníku:</label>
-					<input type="text" class="form-control" id="slidecolor" name="slidecolor" value="' . $sys["slidecolor"] . '">
+					<label class="control-label" for="slidewidth">Barva odkazů:</label>
+					<input type="text" class="form-control" id="linkcolor" name="linkcolor" value="' . $sys["linkcolor"] . '">
 				</div>
 				' . $whitelabel . '
 			</div>
@@ -184,7 +180,7 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 		<div id="sys" class="tab-pane fade">
 			<div class="row col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">WebSys v1.01 Ares <span class="label label-warning">beta verze</span></div>
+					<div class="panel-heading">WebSys v1.1 Boreas <span class="label label-success">stable</span></div>
 					<div class="panel-body">
 						<p>Vytvořil Matyáš Koc</p>
 						<p>Systém je povoleno využívat jen v souladu s <a href="https://websys.sufix.cz/index.php?p=lic">aktivní licencí</a></p>
@@ -233,11 +229,6 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 						<tr>
 							<td>Magnific Popup</td>
 							<td>Dmitry Semenov</td>
-							<td>MIT</td>
-						</tr>
-						<tr>
-							<td>Nicescroll</td>
-							<td>InuYaksa</td>
 							<td>MIT</td>
 						</tr>
 						<tr>
