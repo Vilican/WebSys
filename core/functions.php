@@ -37,6 +37,7 @@ function boxes() {
 		while($box = $boxes->fetch_assoc()) {
 			if ($box["access"] == 0 or $box["access"] <= $_SESSION["level"]) {
 				$box["content"] = str_ireplace("%usermenu%", user_menu(), $box["content"]);
+                $box["content"] = str_ireplace("%arthistory%", article_history(), $box["content"]);
 				$box_column .= '<div class="well">'. $box["content"] ."</div>";
 			}
 		}
@@ -111,6 +112,21 @@ function user_menu() {
 	}
 	
 	return $menu;
+}
+
+function article_history() {
+    global $sys, $mysql;
+
+    $menu = "<p>Nejnovější články:</p>";
+    $articles = $mysql->query("SELECT `id`, `location`, `title` FROM `articles` WHERE `approved` = 1 ORDER BY `date` DESC LIMIT 5;");
+
+    while ($article = $articles->fetch_assoc()) {
+
+        $menu .= '<a href="index.php?p='. $article["location"] .'&id='. $article["id"] .'"><p class="list-group-item-heading">'. $article["title"] .'</p></a>';
+
+    }
+
+    return $menu;
 }
 
 function generate_csrf() {

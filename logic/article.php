@@ -20,6 +20,6 @@ do {
 	$article = $article->fetch_assoc();
 	
 	$page["title"] = "Článek: " . $article["title"];
-	$page["content"] = '<p>Napsal '. id_to_user($article["username"]) .', '. date("j.n.Y G:i", strtotime($article["date"])) .'</p><hr>'. $article["text"];
+	$page["content"] = '<p>Napsal '. id_to_user($article["author"]) .', '. date("j.n.Y G:i", strtotime($article["date"])) .'</p><hr>'. $article["text"];
 	
 } while(0);
