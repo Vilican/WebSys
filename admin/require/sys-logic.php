@@ -11,8 +11,8 @@ if (isset($_POST["save"])) do {
 		break;
 	}
 	
-	if (!check_type($_POST["title"], "nospecial") or empty($_POST["title"])) {
-		$message = '<div class="alert alert-danger"><strong>Název neuložen - nesmí obsahovat speciální znaky a musí být vyplněn!</strong></div>';
+	if (empty($_POST["title"])) {
+		$message = '<div class="alert alert-danger"><strong>Název musí být vyplněn!</strong></div>';
 	} else {
 		$mysql->query("UPDATE `settings` SET `value` = ". $mysql->quote($_POST["title"]) ." WHERE `setting` = 'title';");
 	}

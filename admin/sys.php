@@ -243,7 +243,7 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 						<tr>
 							<td>YubiAuth</td>
 							<td>Matyáš Koc</td>
-							<td>CC BY-NC-SA (MIT pro WebSys)</td>
+							<td>CC BY-NC-SA (CC BY-SA ve WebSys)</td>
 						</tr>
 					</tbody>
 				</table>
