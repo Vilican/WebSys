@@ -14,14 +14,11 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 	}
 	
 	if ($sys["license"] >= 1) {
-        $lic_notice = '<div class="alert alert-success"><p><strong>Licencovaný systém (PRO)</strong></p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován</p></div>';
-	} else {
+        $lic_notice = '<div class="alert alert-success"><p><strong>Licencovaný systém (PRO)</strong></p><p>a) komerční použití je povoleno<br>b) zpětný odkaz není požadován<br>c) děkujeme, že jste podpořili vývoj systému</p></div>';
+        $whitelabel = '<div class="checkbox"><label><input type="checkbox" name="whitelabel"' . parse_to_checkbox($sys["whitelabel"]) . '> Skrýt zpětné odkazy <span class="label label-warning">PRO</span></label></div>';
+    } else {
         $lic_notice = '<div class="alert alert-warning"><p><strong>Nelicencovaný systém (FREE)</strong></p><p>a) pouze nekomerční použití<br>b) musí zobrazovat zpětný odkaz</p></div>';
     }
-
-	if ($sys["license"] >= 2) {
-		$whitelabel = '<div class="checkbox"><label><input type="checkbox" name="whitelabel"' . parse_to_checkbox($sys["whitelabel"]) . '> Skrýt zpětné odkazy <span class="label label-warning">PRO</span></label></div>';
-	}
 	
 	$page["title"] = 'Nastavení systému';
 	
@@ -174,7 +171,7 @@ if (!isset($_SESSION["id"]) or $_SESSION["id"] != 0) {
 		<div id="sys" class="tab-pane fade">
 			<div class="row col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">WebSys v1.1 Boreas <span class="label label-success">stable</span></div>
+					<div class="panel-heading">WebSys v1.1.1 Boreas <span class="label label-success">stable</span></div>
 					<div class="panel-body">
 						<p>Vytvořil Matyáš Koc</p>
 						<p>Systém je povoleno využívat jen v souladu s <a href="https://websys.sufix.cz/index.php?p=lic">aktivní licencí</a></p>

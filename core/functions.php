@@ -117,12 +117,12 @@ function user_menu() {
 function article_history() {
     global $sys, $mysql;
 
-    $menu = "<p>Nejnovější články:</p>";
+    $menu = "<p><strong>Nejnovější články:</strong></strong></p>";
     $articles = $mysql->query("SELECT `id`, `location`, `title` FROM `articles` WHERE `approved` = 1 ORDER BY `date` DESC LIMIT 5;");
 
     while ($article = $articles->fetch_assoc()) {
 
-        $menu .= '<a href="index.php?p='. $article["location"] .'&id='. $article["id"] .'"><p class="list-group-item-heading">'. $article["title"] .'</p></a>';
+        $menu .= '<a href="index.php?p='. $article["location"] .'&id='. $article["id"] .'"><p class="">'. $article["title"] .'</p></a>';
 
     }
 

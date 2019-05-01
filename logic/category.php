@@ -42,7 +42,7 @@ do {
 		
 		while ($article = $articles->fetch_assoc()) {
 			
-			$page["content"] .= '<a href="index.php?p='. santise($_GET["p"]) .'&id='. $article["id"] .'" class="list-group-item mgdown"><p class="list-group-item-heading">'. $article["title"] .'</p><p class="list-group-item-text">'. $article["description"] .'</p></a>';
+			$page["content"] .= '<a href="index.php?p='. santise($_GET["p"]) .'&id='. $article["id"] .'" class="list-group-item mgdown"><p class="text-smaller text-muted" style="margin-bottom: 0">'. date("j.n.Y G:i", strtotime($article["date"])) .'&nbsp;|&nbsp;'. $article["username"] .'</p><p class="list-group-item-heading">'. $article["title"] .'</p><p class="list-group-item-text">'. $article["description"] .'</p></a>';
 			
 		}
 		

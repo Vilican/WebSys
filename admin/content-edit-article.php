@@ -48,13 +48,18 @@ do {
 			$message .= 'Titulek musí obsahovat 5 až 48 znaků!<br>';
 			$err = true;
 		}
+
+        if (date('Y-m-d H:i:s', strtotime($_POST["date"])) != $_POST["date"]) {
+            $message .= 'Datum není platné!<br>';
+            $err = true;
+        }
 		
 		if ($err) {
 			$message = '<div class="alert alert-danger"><p><strong>Při ukládání došlo k následujícím chybám:</strong></p><p>'. $message .'</p></div>';
 			break;
 		}
 
-		$mysql->query("UPDATE `articles` SET `title` = ". $mysql->quote(santise($_POST["title"])) .", `text` = ". $mysql->quote($_POST["content"]) .", `description` = ". $mysql->quote(santise($_POST["description"])) .", `location` = ". $mysql->quote(santise($_POST["location"])) ." WHERE `articles`.`id` = ". $mysql->quote($_GET["id"]) .";");
+		$mysql->query("UPDATE `articles` SET `title` = ". $mysql->quote(santise($_POST["title"])) .", `text` = ". $mysql->quote($_POST["content"]) .", `description` = ". $mysql->quote(santise($_POST["description"])) .", `location` = ". $mysql->quote(santise($_POST["location"])) .", `date` = ". $mysql->quote(santise($_POST["date"])) ." WHERE `articles`.`id` = ". $mysql->quote($_GET["id"]) .";");
 		$message = '<div class="alert alert-success"><strong>Stránka upravena</strong></div>';
 		$art = $mysql->query("SELECT * FROM `articles` WHERE `articles`.`id` = ". $mysql->quote($_GET["id"]) .";")->fetch_assoc();
 		
@@ -79,6 +84,7 @@ do {
 <tr><td>Titulek <span class="text-danger">*</span>:</td><td><input type="text" name="title" class="form-control" value="'. restore_value($art["title"], santise($_POST["title"])) .'"></td></tr>
 <tr><td>Popis:</td><td><textarea name="description" class="form-control">'. restore_value($art["description"], santise($_POST["description"])) .'</textarea></td></tr>
 <tr><td>Obsah <span class="text-danger">*</span>:</td><td><textarea name="content" class="form-control">'. restore_value($art["text"], $_POST["content"]) .'</textarea>'. $lic .'</td></tr>
+<tr><td>Datum <span class="text-danger">*</span>:</td><td><input type="text" name="date" class="form-control" value="'. restore_value($art["date"], santise($_POST["date"])) .'"></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="csrf" value="'. generate_csrf() .'"><input type="submit" name="submit" value="Upravit" class="btn btn-default"></td></tr>
 </table></form>';
 
